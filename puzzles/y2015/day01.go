@@ -1,4 +1,4 @@
-package Y2015
+package y2015
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"github.com/martincostello/advent-of-go/puzzles"
 )
 
+// Day01 solves the puzzle for day 1 of Advent of Code 2015.
 func Day01(input []byte) puzzles.PuzzleSolution {
 	floor := 0
 	instructionThatEntersBasement := -1
