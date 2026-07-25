@@ -7,12 +7,12 @@ import (
 )
 
 // Day01 solves the puzzle for day 1 of Advent of Code 2015.
-func Day01(input []byte) puzzles.PuzzleSolution {
+func Day01(input *puzzles.PuzzleData) puzzles.PuzzleSolution {
 	floor := 0
 	instructionThatEntersBasement := -1
 	hasVisitedBasement := false
 
-	for i, ch := range input {
+	for i, ch := range input.AsString() {
 		switch ch {
 		case '(':
 			floor++
