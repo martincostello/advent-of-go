@@ -11,11 +11,11 @@ import (
 )
 
 // Day02 solves the puzzle for day 2 of Advent of Code 2015.
-func Day02(input *puzzles.PuzzleData) puzzles.PuzzleSolution {
+func Day02(input []string) puzzles.PuzzleSolution {
 	var totalArea int
 	var totalLength int
 
-	for _, line := range input.AsLines() {
+	for _, line := range input {
 		var l, w, h float64
 
 		_, err := fmt.Sscanf(line, "%fx%fx%f", &l, &w, &h)

@@ -23,11 +23,11 @@ func Solve(input *puzzles.PuzzleInput) puzzles.PuzzleSolution {
 
 	switch input.Day {
 	case 1:
-		return y2015.Day01(input.Input)
+		return y2015.Day01(input.Input.AsString())
 	case 2:
-		return y2015.Day02(input.Input)
+		return y2015.Day02(input.Input.AsLines())
 	case 3:
-		return y2015.Day03(input.Input)
+		return y2015.Day03(input.Input.AsString())
 	default:
 		return unsolved
 	}

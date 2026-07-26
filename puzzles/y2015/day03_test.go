@@ -6,7 +6,6 @@ package y2015_test
 import (
 	"testing"
 
-	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
@@ -26,8 +25,7 @@ func TestSolveDay03(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			input := puzzles.PuzzleData([]byte(tt.input))
-			got := y2015.Day03(&input)
+			got := y2015.Day03(tt.input)
 			if got.Part1 != tt.wantPart1 || got.Part2 != tt.wantPart2 {
 				t.Errorf("Day03(%q) = (%q, %q), want (%q, %q)", tt.input, got.Part1, got.Part2, tt.wantPart1, tt.wantPart2)
 			}
