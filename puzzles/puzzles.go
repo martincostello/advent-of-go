@@ -24,7 +24,11 @@ type PuzzleSolution struct {
 
 // Returns the input as a slice of lines.
 func (input *PuzzleData) AsLines() []string {
-	return strings.Split(string(*input), "\n")
+	lines := strings.Split(string(*input), "\n")
+	if len(lines) > 0 && lines[len(lines)-1] == "" {
+		lines = lines[:len(lines)-1]
+	}
+	return lines
 }
 
 // Returns the input as a single string.
