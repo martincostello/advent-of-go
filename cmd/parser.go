@@ -15,13 +15,16 @@ import (
 // returning the year and day of the puzzle to solve and its input data.
 func parse(args []string) (int, int, []byte) {
 	flags := flag.NewFlagSet("cmd", flag.ContinueOnError)
-	flags.SetOutput(io.Discard)
+	flags.SetOutput(os.Stdout)
 
 	year := flags.Int("year", time.Now().Local().Year(), "the year of the puzzle to run")
 	day := flags.Int("day", time.Now().Local().Day(), "the day of the puzzle to run")
 
 	err := flags.Parse(args)
 	if err != nil {
+		if err == flag.ErrHelp {
+			os.Exit(0)
+		}
 		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
 		os.Exit(1)
 	}
