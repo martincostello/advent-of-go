@@ -21,6 +21,8 @@ func TestSolutions(t *testing.T) {
 		wantSolution2 string
 	}{
 		{2015, 1, "232", "1783"},
+		{2015, 2, "1598415", "3812909"},
+		{2015, 3, "2565", "2639"},
 	}
 
 	for _, tt := range tests {

@@ -2,7 +2,7 @@
 
 $ErrorActionPreference = "Stop"
 
-go test ./...
+go test ./... -coverpkg=./...
 
 if ($LASTEXITCODE -ne 0) {
     throw "go test failed"
