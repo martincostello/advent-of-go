@@ -9,7 +9,7 @@ import (
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
-func TestSolveDay03(t *testing.T) {
+func TestSolve2015Day03(t *testing.T) {
 	tests := []struct {
 		input     string
 		wantPart1 string
