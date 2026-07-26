@@ -81,8 +81,9 @@ func searchForSolution(secretKey string, zeroes int, start int, length int, ctx 
 
 func isSolution(value int, secretKey string, zeroes int) bool {
 	target := fmt.Sprintf("%s%d", secretKey, value)
-
 	buffer := []byte(target)
+
+	// codeql[go/weak-sensitive-data-hashing] not used for real passwords
 	hash := md5.Sum([]byte(buffer))
 
 	wholeBytes := zeroes / 2
