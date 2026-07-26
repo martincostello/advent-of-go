@@ -12,6 +12,7 @@ permissions: {}
 
 jobs:
   analysis:
+    name: analysis (${{ matrix.language }})
     runs-on: ubuntu-24.04
 
     permissions:
@@ -22,7 +23,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'actions', 'go' ]
+        include:
+          - language: actions
+            build-mode: none
+          - language: go
+            build-mode: autobuild
 
     steps:
 
@@ -35,7 +40,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
         with:
-          build-mode: none
+          build-mode: ${{ matrix.build-mode }}
           languages: ${{ matrix.language }}
           queries: security-and-quality
 
