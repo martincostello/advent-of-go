@@ -14,8 +14,19 @@ import (
 
 // Day04 solves the puzzle for day 4 of Advent of Code 2015.
 func Day04(input string) puzzles.PuzzleSolution {
-	lowestZeroHash5 := GetLowestPositiveNumberHash(input, 5)
-	lowestZeroHash6 := GetLowestPositiveNumberHash(input, 6)
+	var (
+		lowestZeroHash5 int
+		lowestZeroHash6 int
+		wg              sync.WaitGroup
+	)
+
+	wg.Go(func() {
+		lowestZeroHash5 = GetLowestPositiveNumberHash(input, 5)
+	})
+	wg.Go(func() {
+		lowestZeroHash6 = GetLowestPositiveNumberHash(input, 6)
+	})
+	wg.Wait()
 
 	return puzzles.PuzzleSolution{
 		Part1: fmt.Sprint(lowestZeroHash5),
@@ -24,7 +35,7 @@ func Day04(input string) puzzles.PuzzleSolution {
 }
 
 func GetLowestPositiveNumberHash(secretKey string, zeroes int) int {
-	parallelism := 10
+	parallelism := 20
 	rangeSize := 500
 
 	ctx, cancel := context.WithCancel(context.Background())
