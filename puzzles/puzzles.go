@@ -35,3 +35,17 @@ func (input *PuzzleData) AsLines() []string {
 func (input *PuzzleData) AsString() string {
 	return string(*input)
 }
+
+// Represents a point in 2D space.
+type Point struct {
+	X int
+	Y int
+}
+
+// Adds two points together and returns the result as a new point.
+func Add(left Point, right Point) Point {
+	return Point{
+		X: left.X + right.X,
+		Y: left.Y + right.Y,
+	}
+}
