@@ -1,0 +1,16 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,yml}]
+indent_size = 2
+
+[*.go]
+file_header_template = Copyright (c) Martin Costello, 2026. All rights reserved.\nLicensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
+indent_style = tab
