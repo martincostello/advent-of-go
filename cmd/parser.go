@@ -13,11 +13,15 @@ import (
 
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
-func Parse() (int, int, []byte) {
+func parse(args []string) (int, int, []byte) {
 	year := flag.Int("year", time.Now().Local().Year(), "the year of the puzzle to run")
 	day := flag.Int("day", time.Now().Local().Day(), "the day of the puzzle to run")
 
-	flag.Parse()
+	err := flag.CommandLine.Parse(args)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
+		os.Exit(1)
+	}
 
 	var input []byte
 
