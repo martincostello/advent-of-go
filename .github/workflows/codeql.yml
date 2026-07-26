@@ -60,6 +60,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
 
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.sha }}
+      cancel-in-progress: false
+
     steps:
 
       - name: Report status
