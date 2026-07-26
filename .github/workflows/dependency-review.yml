@@ -3,11 +3,16 @@ name: dependency-review
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.sha }}
+  cancel-in-progress: false
+
 permissions: {}
 
 jobs:
   dependency-review:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
 
     permissions:
       contents: read
