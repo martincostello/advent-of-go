@@ -16,12 +16,11 @@ var up = puzzles.Point{X: 0, Y: 1}
 var down = puzzles.Point{X: 0, Y: -1}
 
 // Day03 solves the puzzle for day 3 of Advent of Code 2015.
-func Day03(input *puzzles.PuzzleData) puzzles.PuzzleSolution {
+func Day03(input string) puzzles.PuzzleSolution {
 	var santa = origin
-	var directions = input.AsString()
 	var visited = make(map[puzzles.Point]bool)
 
-	for _, direction := range directions {
+	for _, direction := range input {
 		santa = move(santa, direction)
 		visited[santa] = true
 	}
@@ -38,7 +37,7 @@ func Day03(input *puzzles.PuzzleData) puzzles.PuzzleSolution {
 
 	visited[santa] = true
 
-	for _, direction := range directions {
+	for _, direction := range input {
 		current = move(current, direction)
 		visited[current] = true
 		current, previous = previous, current

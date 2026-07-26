@@ -33,7 +33,7 @@ func (input *PuzzleData) AsLines() []string {
 
 // Returns the input as a single string.
 func (input *PuzzleData) AsString() string {
-	return string(*input)
+	return strings.TrimSuffix(string(*input), "\n")
 }
 
 // Represents a point in 2D space.

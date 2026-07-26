@@ -6,24 +6,22 @@ package y2015_test
 import (
 	"testing"
 
-	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
-func TestSolveDay02(t *testing.T) {
+func TestSolve2015Day02(t *testing.T) {
 	tests := []struct {
-		input     string
+		input     []string
 		wantPart1 string
 		wantPart2 string
 	}{
-		{"2x3x4", "58", "34"},
-		{"1x1x10", "43", "14"},
+		{[]string{"2x3x4"}, "58", "34"},
+		{[]string{"1x1x10"}, "43", "14"},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.input, func(t *testing.T) {
-			input := puzzles.PuzzleData([]byte(tt.input))
-			got := y2015.Day02(&input)
+		t.Run(tt.input[0], func(t *testing.T) {
+			got := y2015.Day02(tt.input)
 			if got.Part1 != tt.wantPart1 || got.Part2 != tt.wantPart2 {
 				t.Errorf("Day02(%q) = (%q, %q), want (%q, %q)", tt.input, got.Part1, got.Part2, tt.wantPart1, tt.wantPart2)
 			}
