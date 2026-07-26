@@ -1,0 +1,8 @@
+codecov:
+  require_ci_to_pass: false
+
+coverage:
+  status:
+    project:
+      default:
+        if_not_found: failure
