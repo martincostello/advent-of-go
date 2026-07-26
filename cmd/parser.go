@@ -17,7 +17,11 @@ func parse(args []string) (int, int, []byte) {
 	year := flag.Int("year", time.Now().Local().Year(), "the year of the puzzle to run")
 	day := flag.Int("day", time.Now().Local().Day(), "the day of the puzzle to run")
 
-	flag.CommandLine.Parse(args)
+	err := flag.CommandLine.Parse(args)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
+		os.Exit(1)
+	}
 
 	var input []byte
 
