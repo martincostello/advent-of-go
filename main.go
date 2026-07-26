@@ -10,5 +10,5 @@ import (
 )
 
 func main() {
-	cmd.Run(os.Args[1:])
+	_ = cmd.Run(os.Args[1:])
 }
