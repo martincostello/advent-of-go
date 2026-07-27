@@ -5,6 +5,7 @@ package solver
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
@@ -20,7 +21,7 @@ var unsolved = puzzles.PuzzleSolution{
 // solution has been implemented yet for the specified year and day.
 func Solve(input *puzzles.PuzzleInput, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	if input.Year != 2015 {
-		return unsolved, nil
+		return unsolved, fmt.Errorf("no solutions are implemented for year %d", input.Year)
 	}
 
 	return solve2015(input, ctx)
@@ -39,6 +40,6 @@ func solve2015(input *puzzles.PuzzleInput, ctx context.Context) (puzzles.PuzzleS
 	case 5:
 		return y2015.Day05(input.Input.Lines()), nil
 	default:
-		return unsolved, nil
+		return unsolved, fmt.Errorf("no solution is implemented for day %d of year %d", input.Day, input.Year)
 	}
 }

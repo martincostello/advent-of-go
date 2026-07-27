@@ -13,7 +13,7 @@ import (
 
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
-func parse(args []string) (int, int, []byte, error) {
+func Parse(args []string) (int, int, []byte, error) {
 	flags := flag.NewFlagSet("cmd", flag.ContinueOnError)
 	flags.SetOutput(os.Stdout)
 

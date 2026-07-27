@@ -13,7 +13,7 @@ import (
 )
 
 func Run(args []string, ctx context.Context) (puzzles.PuzzleSolution, error) {
-	year, day, raw, err := parse(args)
+	year, day, raw, err := Parse(args)
 	if err != nil {
 		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse arguments: %w", err)
 	}
