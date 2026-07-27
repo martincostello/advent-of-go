@@ -63,8 +63,8 @@ func TestCmdRunUnsolved(t *testing.T) {
 		day   = 42
 		input = filepath.Join(
 			inputDir,
-			fmt.Sprintf("Y%d", year),
-			fmt.Sprintf("Day%02d", day),
+			"Y2015",
+			"Day01",
 			"input.txt",
 		)
 	)

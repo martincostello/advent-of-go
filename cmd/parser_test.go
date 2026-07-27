@@ -55,3 +55,11 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 		})
 	}
 }
+
+func TestCmdParseWhenNoInputFileSpecified(t *testing.T) {
+	args := []string{"--day", "1", "--year", "2015"}
+	_, _, _, err := cmd.Parse(args)
+	if err == nil {
+		t.Fatalf("Parse(%v) did not return an error", args)
+	}
+}

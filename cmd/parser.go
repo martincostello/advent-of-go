@@ -6,7 +6,6 @@ package cmd
 import (
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"time"
 )
@@ -32,11 +31,8 @@ func Parse(args []string) (int, int, []byte, error) {
 	var input []byte
 
 	if flags.NArg() < 1 {
-		input, err = io.ReadAll(os.Stdin)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "reading stdin failed: %v\n", err)
-			return 0, 0, nil, err
-		}
+		err = fmt.Errorf("no input file specified")
+		return 0, 0, nil, err
 	} else {
 		path := flags.Arg(0)
 		input, err = os.ReadFile(path)
