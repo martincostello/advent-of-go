@@ -16,27 +16,27 @@ var unsolved = puzzles.PuzzleSolution{
 
 // Solve returns the solution for the given puzzle input, or unsolved if no
 // solution has been implemented yet for the specified year and day.
-func Solve(input *puzzles.PuzzleInput) puzzles.PuzzleSolution {
+func Solve(input *puzzles.PuzzleInput) (puzzles.PuzzleSolution, error) {
 	if input.Year != 2015 {
-		return unsolved
+		return unsolved, nil
 	}
 
 	return solve2015(input)
 }
 
-func solve2015(input *puzzles.PuzzleInput) puzzles.PuzzleSolution {
+func solve2015(input *puzzles.PuzzleInput) (puzzles.PuzzleSolution, error) {
 	switch input.Day {
 	case 1:
-		return y2015.Day01(input.Input.String())
+		return y2015.Day01(input.Input.String()), nil
 	case 2:
-		return y2015.Day02(input.Input.Lines())
+		return y2015.Day02(input.Input.Lines()), nil
 	case 3:
-		return y2015.Day03(input.Input.String())
+		return y2015.Day03(input.Input.String()), nil
 	case 4:
-		return y2015.Day04(input.Input.String())
+		return y2015.Day04(input.Input.String()), nil
 	case 5:
-		return y2015.Day05(input.Input.Lines())
+		return y2015.Day05(input.Input.Lines()), nil
 	default:
-		return unsolved
+		return unsolved, nil
 	}
 }

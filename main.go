@@ -4,11 +4,16 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/martincostello/advent-of-go/cmd"
 )
 
 func main() {
-	_ = cmd.Run(os.Args[1:])
+	_, err := cmd.Run(os.Args[1:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
 }

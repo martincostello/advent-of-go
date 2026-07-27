@@ -43,7 +43,10 @@ func TestCmdRun(t *testing.T) {
 				fmt.Sprintf("Day%02d", tt.day),
 				"input.txt",
 			)
-			got := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input})
+			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input})
+			if err != nil {
+				t.Fatalf("Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
+			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
 			}

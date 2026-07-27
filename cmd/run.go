@@ -11,7 +11,7 @@ import (
 	"github.com/martincostello/advent-of-go/solver"
 )
 
-func Run(args []string) puzzles.PuzzleSolution {
+func Run(args []string) (puzzles.PuzzleSolution, error) {
 	year, day, raw := parse(args)
 
 	fmt.Printf("Solving Advent of Code for day %02d of %04d\n", day, year)
@@ -27,7 +27,10 @@ func Run(args []string) puzzles.PuzzleSolution {
 
 	started := time.Now()
 
-	solution := solver.Solve(input)
+	solution, err := solver.Solve(input)
+	if err != nil {
+		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to solve puzzle: %w", err)
+	}
 
 	ended := time.Now()
 
@@ -41,5 +44,5 @@ func Run(args []string) puzzles.PuzzleSolution {
 	fmt.Println()
 	fmt.Printf("Solved in %s\n", ended.Sub(started))
 
-	return solution
+	return solution, nil
 }
