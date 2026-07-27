@@ -18,12 +18,16 @@ var (
 )
 
 // Day03 solves the puzzle for day 3 of Advent of Code 2015.
-func Day03(input string) puzzles.PuzzleSolution {
+func Day03(input string) (puzzles.PuzzleSolution, error) {
 	var santa = origin
 	var visited = make(map[puzzles.Point]bool)
 
 	for _, direction := range input {
-		santa = move(santa, direction)
+		var err error
+		santa, err = move(santa, direction)
+		if err != nil {
+			return puzzles.PuzzleSolution{}, fmt.Errorf("failed to move santa: %w", err)
+		}
 		visited[santa] = true
 	}
 
@@ -42,7 +46,7 @@ func Day03(input string) puzzles.PuzzleSolution {
 	visited[santa] = true
 
 	for _, direction := range input {
-		current = move(current, direction)
+		current, _ = move(current, direction)
 		visited[current] = true
 		current, previous = previous, current
 	}
@@ -52,20 +56,20 @@ func Day03(input string) puzzles.PuzzleSolution {
 	return puzzles.PuzzleSolution{
 		Part1: fmt.Sprint(housesWithPresentsFromSanta),
 		Part2: fmt.Sprint(housesWithPresentsFromSantaAndRoboSanta),
-	}
+	}, nil
 }
 
-func move(p puzzles.Point, direction rune) puzzles.Point {
+func move(p puzzles.Point, direction rune) (puzzles.Point, error) {
 	switch direction {
 	case '<':
-		return puzzles.Add(p, left)
+		return puzzles.Add(p, left), nil
 	case '>':
-		return puzzles.Add(p, right)
+		return puzzles.Add(p, right), nil
 	case '^':
-		return puzzles.Add(p, up)
+		return puzzles.Add(p, up), nil
 	case 'v':
-		return puzzles.Add(p, down)
+		return puzzles.Add(p, down), nil
 	default:
-		panic(fmt.Sprintf("invalid direction: %q", direction))
+		return puzzles.Point{}, fmt.Errorf("invalid direction: %q", direction)
 	}
 }

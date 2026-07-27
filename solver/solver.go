@@ -29,9 +29,9 @@ func solve2015(input *puzzles.PuzzleInput) (puzzles.PuzzleSolution, error) {
 	case 1:
 		return y2015.Day01(input.Input.String()), nil
 	case 2:
-		return y2015.Day02(input.Input.Lines()), nil
+		return y2015.Day02(input.Input.Lines())
 	case 3:
-		return y2015.Day03(input.Input.String()), nil
+		return y2015.Day03(input.Input.String())
 	case 4:
 		return y2015.Day04(input.Input.String())
 	case 5:
