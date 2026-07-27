@@ -10,21 +10,22 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/martincostello/advent-of-go/cmd"
+	"github.com/martincostello/advent-of-go/puzzles"
 )
 
 func TestCmdRun(t *testing.T) {
 	tests := []struct {
-		year          int
-		day           int
-		wantSolution1 string
-		wantSolution2 string
+		year int
+		day  int
+		want puzzles.PuzzleSolution
 	}{
-		{2015, 1, "232", "1783"},
-		{2015, 2, "1598415", "3812909"},
-		{2015, 3, "2565", "2639"},
-		{2015, 4, "346386", "9958218"},
-		{2015, 5, "236", "51"},
+		{2015, 1, puzzles.PuzzleSolution{Part1: "232", Part2: "1783"}},
+		{2015, 2, puzzles.PuzzleSolution{Part1: "1598415", Part2: "3812909"}},
+		{2015, 3, puzzles.PuzzleSolution{Part1: "2565", Part2: "2639"}},
+		{2015, 4, puzzles.PuzzleSolution{Part1: "346386", Part2: "9958218"}},
+		{2015, 5, puzzles.PuzzleSolution{Part1: "236", Part2: "51"}},
 	}
 
 	for _, tt := range tests {
@@ -43,8 +44,8 @@ func TestCmdRun(t *testing.T) {
 				"input.txt",
 			)
 			got := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input})
-			if got.Part1 != tt.wantSolution1 || got.Part2 != tt.wantSolution2 {
-				t.Errorf("Run(%d, %d) = (%q, %q), want (%q, %q)", tt.year, tt.day, got.Part1, got.Part2, tt.wantSolution1, tt.wantSolution2)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
 			}
 		})
 	}

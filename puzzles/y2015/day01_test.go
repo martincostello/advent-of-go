@@ -6,23 +6,24 @@ package y2015_test
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
 func TestY2015Day01(t *testing.T) {
 	tests := []struct {
-		input           string
-		wantFloor       string
-		wantInstruction string
+		input string
+		want  puzzles.PuzzleSolution
 	}{
-		{"(())", "0", "-1"},
+		{"(())", puzzles.PuzzleSolution{Part1: "0", Part2: "-1"}},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			got := y2015.Day01(tt.input)
-			if got.Part1 != tt.wantFloor || got.Part2 != tt.wantInstruction {
-				t.Errorf("Day01(%q) = (%q, %q), want (%q, %q)", tt.input, got.Part1, got.Part2, tt.wantFloor, tt.wantInstruction)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Day01(%q) mismatch (-want +got):\n%s", tt.input, diff)
 			}
 		})
 	}
