@@ -11,16 +11,18 @@ import (
 )
 
 // Day02 solves the puzzle for day 2 of Advent of Code 2015.
-func Day02(input []string) puzzles.PuzzleSolution {
-	var totalArea int
-	var totalLength int
+func Day02(input []string) (puzzles.PuzzleSolution, error) {
+	var (
+		totalArea   int
+		totalLength int
+	)
 
-	for _, line := range input {
+	for _, dimensions := range input {
 		var l, w, h float64
 
-		_, err := fmt.Sscanf(line, "%fx%fx%f", &l, &w, &h)
+		_, err := fmt.Sscanf(dimensions, "%fx%fx%f", &l, &w, &h)
 		if err != nil {
-			panic(fmt.Sprintf("failed to parse dimensions %q: %v", line, err))
+			return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse dimensions %q: %v", dimensions, err)
 		}
 
 		area := 2*l*w + 2*h*w + 2*h*l
@@ -36,5 +38,5 @@ func Day02(input []string) puzzles.PuzzleSolution {
 	return puzzles.PuzzleSolution{
 		Part1: fmt.Sprint(totalArea),
 		Part2: fmt.Sprint(totalLength),
-	}
+	}, nil
 }

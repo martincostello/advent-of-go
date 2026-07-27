@@ -6,14 +6,13 @@ package cmd
 import (
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"time"
 )
 
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
-func parse(args []string) (int, int, []byte) {
+func Parse(args []string) (int, int, []byte, error) {
 	flags := flag.NewFlagSet("cmd", flag.ContinueOnError)
 	flags.SetOutput(os.Stdout)
 
@@ -26,28 +25,22 @@ func parse(args []string) (int, int, []byte) {
 			os.Exit(0)
 		}
 		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
-		os.Exit(1)
+		return 0, 0, nil, err
 	}
 
 	var input []byte
 
 	if flags.NArg() < 1 {
-		puzzle, err := io.ReadAll(os.Stdin)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "reading stdin failed: %v\n", err)
-			os.Exit(1)
-		}
-
-		input = puzzle
+		err = fmt.Errorf("no input file specified")
+		return 0, 0, nil, err
 	} else {
 		path := flags.Arg(0)
-		puzzle, err := os.ReadFile(path)
+		input, err = os.ReadFile(path)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "reading file %q failed: %v\n", path, err)
-			os.Exit(1)
+			return 0, 0, nil, err
 		}
-		input = puzzle
 	}
 
-	return *year, *day, input
+	return *year, *day, input, nil
 }

@@ -23,23 +23,23 @@ func Day05(input []string) puzzles.PuzzleSolution {
 	}
 }
 
-func IsNiceV1(value string) bool {
-	if containsAny(value, notNice) {
+func IsNiceV1(s string) bool {
+	if containsAny(s, notNice) {
 		return false
 	}
 
 	vowels := 0
 	hasAnyConsecutiveLetters := false
 
-	for i := 0; i < len(value); i++ {
-		ch := value[i]
+	for i := 0; i < len(s); i++ {
+		c := s[i]
 
-		if isVowel(rune(ch)) {
+		if isVowel(rune(c)) {
 			vowels++
 		}
 
 		if i > 0 && !hasAnyConsecutiveLetters {
-			hasAnyConsecutiveLetters = ch == value[i-1]
+			hasAnyConsecutiveLetters = c == s[i-1]
 		}
 
 		if hasAnyConsecutiveLetters && vowels > 2 {
@@ -50,17 +50,17 @@ func IsNiceV1(value string) bool {
 	return false
 }
 
-func IsNiceV2(value string) bool {
-	return HasPairOfLettersWithMoreThanOneOccurrence(value) && HasLetterThatIsTheBreadOfALetterSandwich(value)
+func IsNiceV2(s string) bool {
+	return HasPairOfLettersWithMoreThanOneOccurrence(s) && HasLetterThatIsTheBreadOfALetterSandwich(s)
 }
 
-func HasLetterThatIsTheBreadOfALetterSandwich(value string) bool {
-	if len(value) < 3 {
+func HasLetterThatIsTheBreadOfALetterSandwich(s string) bool {
+	if len(s) < 3 {
 		return false
 	}
 
-	for i := 1; i < len(value)-1; i++ {
-		if value[i-1] == value[i+1] {
+	for i := 1; i < len(s)-1; i++ {
+		if s[i-1] == s[i+1] {
 			return true
 		}
 	}
@@ -90,27 +90,27 @@ func HasPairOfLettersWithMoreThanOneOccurrence(s string) bool {
 	return false
 }
 
-func count(values []string, predicate func(string) bool) int {
-	count := 0
-	for _, v := range values {
-		if predicate(v) {
-			count++
+func count(ss []string, predicate func(string) bool) int {
+	c := 0
+	for _, s := range ss {
+		if predicate(s) {
+			c++
 		}
 	}
-	return count
+	return c
 }
 
-func containsAny(value string, values []string) bool {
-	for _, v := range values {
-		if strings.Contains(value, v) {
+func containsAny(s string, ss []string) bool {
+	for _, v := range ss {
+		if strings.Contains(s, v) {
 			return true
 		}
 	}
 	return false
 }
 
-func isVowel(value rune) bool {
-	switch value {
+func isVowel(r rune) bool {
+	switch r {
 	case 'a', 'e', 'i', 'o', 'u':
 		return true
 	default:

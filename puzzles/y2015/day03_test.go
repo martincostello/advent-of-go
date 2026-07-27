@@ -6,29 +6,41 @@ package y2015_test
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
-func TestSolve2015Day03(t *testing.T) {
+func TestY2015Day03(t *testing.T) {
 	tests := []struct {
-		input     string
-		wantPart1 string
-		wantPart2 string
+		input string
+		want  puzzles.PuzzleSolution
 	}{
-		{">", "1", "2"},
-		{"^>v<", "4", "3"},
-		{"^v^v^v^v^v", "2", "11"},
-		{"^v", "2", "3"},
-		{"^>v<", "4", "3"},
-		{"^v^v^v^v^v", "2", "11"},
+		{">", puzzles.PuzzleSolution{Part1: "1", Part2: "2"}},
+		{"^>v<", puzzles.PuzzleSolution{Part1: "4", Part2: "3"}},
+		{"^v^v^v^v^v", puzzles.PuzzleSolution{Part1: "2", Part2: "11"}},
+		{"^v", puzzles.PuzzleSolution{Part1: "2", Part2: "3"}},
+		{"^>v<", puzzles.PuzzleSolution{Part1: "4", Part2: "3"}},
+		{"^v^v^v^v^v", puzzles.PuzzleSolution{Part1: "2", Part2: "11"}},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			got := y2015.Day03(tt.input)
-			if got.Part1 != tt.wantPart1 || got.Part2 != tt.wantPart2 {
-				t.Errorf("Day03(%q) = (%q, %q), want (%q, %q)", tt.input, got.Part1, got.Part2, tt.wantPart1, tt.wantPart2)
+			got, err := y2015.Day03(tt.input)
+			if err != nil {
+				t.Fatalf("Day03(%q) returned an error: %v", tt.input, err)
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Day03(%q) mismatch (-want +got):\n%s", tt.input, diff)
 			}
 		})
+	}
+}
+
+func TestY2015Day03RejectsInvalidDirections(t *testing.T) {
+	input := "invalid"
+	_, err := y2015.Day03(input)
+	if err == nil {
+		t.Fatalf("Day03(%q) did not return an error", input)
 	}
 }

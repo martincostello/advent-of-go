@@ -6,25 +6,37 @@ package y2015_test
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
-func TestSolve2015Day02(t *testing.T) {
+func TestY2015Day02(t *testing.T) {
 	tests := []struct {
-		input     []string
-		wantPart1 string
-		wantPart2 string
+		input []string
+		want  puzzles.PuzzleSolution
 	}{
-		{[]string{"2x3x4"}, "58", "34"},
-		{[]string{"1x1x10"}, "43", "14"},
+		{[]string{"2x3x4"}, puzzles.PuzzleSolution{Part1: "58", Part2: "34"}},
+		{[]string{"1x1x10"}, puzzles.PuzzleSolution{Part1: "43", Part2: "14"}},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.input[0], func(t *testing.T) {
-			got := y2015.Day02(tt.input)
-			if got.Part1 != tt.wantPart1 || got.Part2 != tt.wantPart2 {
-				t.Errorf("Day02(%q) = (%q, %q), want (%q, %q)", tt.input, got.Part1, got.Part2, tt.wantPart1, tt.wantPart2)
+			got, err := y2015.Day02(tt.input)
+			if err != nil {
+				t.Fatalf("Day02(%q) returned error: %v", tt.input, err)
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Day02(%q) mismatch (-want +got):\n%s", tt.input, diff)
 			}
 		})
+	}
+}
+
+func TestY2015Day02RejectsInvalidDimensions(t *testing.T) {
+	input := []string{"2x3x4", "1x1x10", "invalid"}
+	_, err := y2015.Day02(input)
+	if err == nil {
+		t.Fatalf("Day02(%q) did not return an error", input)
 	}
 }

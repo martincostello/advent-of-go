@@ -4,6 +4,9 @@
 package solver
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
@@ -16,27 +19,27 @@ var unsolved = puzzles.PuzzleSolution{
 
 // Solve returns the solution for the given puzzle input, or unsolved if no
 // solution has been implemented yet for the specified year and day.
-func Solve(input *puzzles.PuzzleInput) puzzles.PuzzleSolution {
+func Solve(input *puzzles.PuzzleInput, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	if input.Year != 2015 {
-		return unsolved
+		return unsolved, fmt.Errorf("no solutions are implemented for year %d", input.Year)
 	}
 
-	return solve2015(input)
+	return solve2015(input, ctx)
 }
 
-func solve2015(input *puzzles.PuzzleInput) puzzles.PuzzleSolution {
+func solve2015(input *puzzles.PuzzleInput, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	switch input.Day {
 	case 1:
-		return y2015.Day01(input.Input.AsString())
+		return y2015.Day01(input.Input.String()), nil
 	case 2:
-		return y2015.Day02(input.Input.AsLines())
+		return y2015.Day02(input.Input.Lines())
 	case 3:
-		return y2015.Day03(input.Input.AsString())
+		return y2015.Day03(input.Input.String())
 	case 4:
-		return y2015.Day04(input.Input.AsString())
+		return y2015.Day04(input.Input.String(), ctx)
 	case 5:
-		return y2015.Day05(input.Input.AsLines())
+		return y2015.Day05(input.Input.Lines()), nil
 	default:
-		return unsolved
+		return unsolved, fmt.Errorf("no solution is implemented for day %d of year %d", input.Day, input.Year)
 	}
 }
