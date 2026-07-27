@@ -90,19 +90,19 @@ func HasPairOfLettersWithMoreThanOneOccurrence(s string) bool {
 	return false
 }
 
-func count(s []string, predicate func(string) bool) int {
+func count(ss []string, predicate func(string) bool) int {
 	c := 0
-	for _, v := range s {
-		if predicate(v) {
+	for _, s := range ss {
+		if predicate(s) {
 			c++
 		}
 	}
 	return c
 }
 
-func containsAny(value string, values []string) bool {
-	for _, v := range values {
-		if strings.Contains(value, v) {
+func containsAny(s string, ss []string) bool {
+	for _, v := range ss {
+		if strings.Contains(s, v) {
 			return true
 		}
 	}
