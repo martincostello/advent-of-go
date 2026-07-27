@@ -12,7 +12,10 @@ import (
 )
 
 func Run(args []string) (puzzles.PuzzleSolution, error) {
-	year, day, raw := parse(args)
+	year, day, raw, err := parse(args)
+	if err != nil {
+		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse arguments: %w", err)
+	}
 
 	fmt.Printf("Solving Advent of Code for day %02d of %04d\n", day, year)
 	fmt.Println()

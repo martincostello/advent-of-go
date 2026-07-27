@@ -15,6 +15,16 @@ import (
 	"github.com/martincostello/advent-of-go/puzzles"
 )
 
+var (
+	_, file, _, _ = runtime.Caller(0)
+	root          = filepath.Dir(file)
+	inputDir      = filepath.Join(
+		root,
+		"..",
+		"input",
+	)
+)
+
 func TestCmdRun(t *testing.T) {
 	tests := []struct {
 		year int
@@ -29,13 +39,6 @@ func TestCmdRun(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		_, file, _, _ := runtime.Caller(0)
-		root := filepath.Dir(file)
-		inputDir := filepath.Join(
-			root,
-			"..",
-			"input",
-		)
 		t.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(t *testing.T) {
 			input := filepath.Join(
 				inputDir,
@@ -51,5 +54,37 @@ func TestCmdRun(t *testing.T) {
 				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
 			}
 		})
+	}
+}
+
+func TestCmdRunUnsolved(t *testing.T) {
+	var (
+		year  = 2001
+		day   = 42
+		input = filepath.Join(
+			inputDir,
+			fmt.Sprintf("Y%d", year),
+			fmt.Sprintf("Day%02d", day),
+			"input.txt",
+		)
+	)
+	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input})
+	if err == nil {
+		t.Fatalf("Run(%d, %d) did not return an error", year, day)
+	}
+}
+
+func TestCmdRunInvalidInput(t *testing.T) {
+	var (
+		year  = 2015
+		day   = 1
+		input = filepath.Join(
+			inputDir,
+			"foo.txt",
+		)
+	)
+	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input})
+	if err == nil {
+		t.Fatalf("Run(%d, %d) did not return an error", year, day)
 	}
 }

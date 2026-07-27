@@ -13,7 +13,7 @@ import (
 
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
-func parse(args []string) (int, int, []byte) {
+func parse(args []string) (int, int, []byte, error) {
 	flags := flag.NewFlagSet("cmd", flag.ContinueOnError)
 	flags.SetOutput(os.Stdout)
 
@@ -26,7 +26,7 @@ func parse(args []string) (int, int, []byte) {
 			os.Exit(0)
 		}
 		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
-		os.Exit(1)
+		return 0, 0, nil, err
 	}
 
 	var input []byte
@@ -35,16 +35,16 @@ func parse(args []string) (int, int, []byte) {
 		input, err = io.ReadAll(os.Stdin)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "reading stdin failed: %v\n", err)
-			os.Exit(1)
+			return 0, 0, nil, err
 		}
 	} else {
 		path := flags.Arg(0)
 		input, err = os.ReadFile(path)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "reading file %q failed: %v\n", path, err)
-			os.Exit(1)
+			return 0, 0, nil, err
 		}
 	}
 
-	return *year, *day, input
+	return *year, *day, input, nil
 }
