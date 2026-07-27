@@ -9,11 +9,13 @@ import (
 	"github.com/martincostello/advent-of-go/puzzles"
 )
 
-var origin = puzzles.Point{X: 0, Y: 0}
-var left = puzzles.Point{X: -1, Y: 0}
-var right = puzzles.Point{X: 1, Y: 0}
-var up = puzzles.Point{X: 0, Y: 1}
-var down = puzzles.Point{X: 0, Y: -1}
+var (
+	origin = puzzles.Point{X: 0, Y: 0}
+	left   = puzzles.Point{X: -1, Y: 0}
+	right  = puzzles.Point{X: 1, Y: 0}
+	up     = puzzles.Point{X: 0, Y: 1}
+	down   = puzzles.Point{X: 0, Y: -1}
+)
 
 // Day03 solves the puzzle for day 3 of Advent of Code 2015.
 func Day03(input string) puzzles.PuzzleSolution {
@@ -31,9 +33,11 @@ func Day03(input string) puzzles.PuzzleSolution {
 	clear(visited)
 	santa = origin
 
-	var robot = origin
-	var current = santa
-	var previous = robot
+	var (
+		robot    = origin
+		current  = santa
+		previous = robot
+	)
 
 	visited[santa] = true
 
@@ -51,16 +55,16 @@ func Day03(input string) puzzles.PuzzleSolution {
 	}
 }
 
-func move(point puzzles.Point, direction rune) puzzles.Point {
+func move(p puzzles.Point, direction rune) puzzles.Point {
 	switch direction {
 	case '<':
-		return puzzles.Add(point, left)
+		return puzzles.Add(p, left)
 	case '>':
-		return puzzles.Add(point, right)
+		return puzzles.Add(p, right)
 	case '^':
-		return puzzles.Add(point, up)
+		return puzzles.Add(p, up)
 	case 'v':
-		return puzzles.Add(point, down)
+		return puzzles.Add(p, down)
 	default:
 		panic(fmt.Sprintf("invalid direction: %q", direction))
 	}

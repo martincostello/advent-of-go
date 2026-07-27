@@ -35,8 +35,10 @@ func Day04(input string) puzzles.PuzzleSolution {
 }
 
 func GetLowestPositiveNumberHash(secretKey string, zeroes int) int {
-	parallelism := 20
-	rangeSize := 500
+	var (
+		parallelism = 20
+		rangeSize   = 500
+	)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()

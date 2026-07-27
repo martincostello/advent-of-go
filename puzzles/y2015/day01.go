@@ -11,12 +11,14 @@ import (
 
 // Day01 solves the puzzle for day 1 of Advent of Code 2015.
 func Day01(input string) puzzles.PuzzleSolution {
-	floor := 0
-	instructionThatEntersBasement := -1
-	hasVisitedBasement := false
+	var (
+		floor                         = 0
+		instructionThatEntersBasement = -1
+		hasVisitedBasement            = false
+	)
 
-	for i, ch := range input {
-		switch ch {
+	for i, c := range input {
+		switch c {
 		case '(':
 			floor++
 		case ')':

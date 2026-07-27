@@ -23,17 +23,17 @@ type PuzzleSolution struct {
 }
 
 // Returns the input as a slice of lines.
-func (input *PuzzleData) AsLines() []string {
-	lines := strings.Split(string(*input), "\n")
-	if len(lines) > 0 && lines[len(lines)-1] == "" {
-		lines = lines[:len(lines)-1]
+func (p *PuzzleData) Lines() []string {
+	l := strings.Split(string(*p), "\n")
+	if len(l) > 0 && l[len(l)-1] == "" {
+		l = l[:len(l)-1]
 	}
-	return lines
+	return l
 }
 
 // Returns the input as a single string.
-func (input *PuzzleData) AsString() string {
-	return strings.TrimSuffix(string(*input), "\n")
+func (p *PuzzleData) String() string {
+	return strings.TrimSuffix(string(*p), "\n")
 }
 
 // Represents a point in 2D space.
