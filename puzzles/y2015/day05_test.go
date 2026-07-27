@@ -9,7 +9,7 @@ import (
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
-func TestSolve2015IsNiceV1(t *testing.T) {
+func TestY2015IsNiceV1(t *testing.T) {
 	tests := []struct {
 		value string
 		want  bool
@@ -34,7 +34,7 @@ func TestSolve2015IsNiceV1(t *testing.T) {
 	}
 }
 
-func TestSolve2015IsNiceV2(t *testing.T) {
+func TestY2015IsNiceV2(t *testing.T) {
 	tests := []struct {
 		value string
 		want  bool
@@ -55,7 +55,7 @@ func TestSolve2015IsNiceV2(t *testing.T) {
 	}
 }
 
-func TestSolve2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
+func TestY2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
 	tests := []struct {
 		value string
 		want  bool
@@ -79,7 +79,7 @@ func TestSolve2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
 	}
 }
 
-func TestSolve2015HasLetterThatIsTheBreadOfALetterSandwich(t *testing.T) {
+func TestY2015HasLetterThatIsTheBreadOfALetterSandwich(t *testing.T) {
 	tests := []struct {
 		value string
 		want  bool

@@ -9,7 +9,7 @@ import (
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
-func TestSolve2015Day04(t *testing.T) {
+func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
 	tests := []struct {
 		secretKey string
 		zeroes    int

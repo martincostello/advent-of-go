@@ -13,7 +13,7 @@ import (
 	"github.com/martincostello/advent-of-go/cmd"
 )
 
-func TestSolutions(t *testing.T) {
+func TestCmdRun(t *testing.T) {
 	tests := []struct {
 		year          int
 		day           int
