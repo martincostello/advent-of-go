@@ -4,6 +4,7 @@
 package solver_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/martincostello/advent-of-go/puzzles"
@@ -11,13 +12,21 @@ import (
 )
 
 func TestSolverSolveWhenUnsolved(t *testing.T) {
-	input := puzzles.PuzzleInput{
-		Year:  2014,
-		Day:   42,
-		Input: nil,
+	var data puzzles.PuzzleData = []byte("invalid")
+	tests := []struct {
+		input puzzles.PuzzleInput
+	}{
+		{input: puzzles.PuzzleInput{Year: 2014, Day: 1, Input: &data}},
+		{input: puzzles.PuzzleInput{Year: 2015, Day: 0, Input: &data}},
+		{input: puzzles.PuzzleInput{Year: 2015, Day: 26, Input: &data}},
 	}
-	_, err := solver.Solve(&input, t.Context())
-	if err == nil {
-		t.Fatalf("Solve(%v#) did not return an error", input)
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%d-%02d", tt.input.Year, tt.input.Day), func(t *testing.T) {
+			_, err := solver.Solve(&tt.input, t.Context())
+			if err == nil {
+				t.Fatalf("Solve(%v#) did not return an error", tt.input)
+			}
+		})
 	}
 }
