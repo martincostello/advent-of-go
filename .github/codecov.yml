@@ -6,3 +6,6 @@ coverage:
     project:
       default:
         if_not_found: failure
+
+ignore:
+  - "main.go"
