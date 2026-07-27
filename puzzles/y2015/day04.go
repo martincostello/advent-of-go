@@ -88,7 +88,7 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 		}
 	}
 
-	return -1, errors.New("no solution was found for the specified secret key.")
+	return -1, errors.New("no solution was found for the specified secret key")
 }
 
 func searchForSolution(secretKey string, zeroes int, start int, length int, ctx context.Context) int {
