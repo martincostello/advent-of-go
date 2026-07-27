@@ -14,7 +14,7 @@ import (
 )
 
 // Day04 solves the puzzle for day 4 of Advent of Code 2015.
-func Day04(input string) (puzzles.PuzzleSolution, error) {
+func Day04(input string, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	var (
 		err5, err6      error
 		lowestZeroHash5 = -1
@@ -22,7 +22,11 @@ func Day04(input string) (puzzles.PuzzleSolution, error) {
 		wg              sync.WaitGroup
 	)
 
-	ctx, cancel := context.WithCancel(context.Background())
+	if err := ctx.Err(); err != nil {
+		return puzzles.PuzzleSolution{}, err
+	}
+
+	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	wg.Go(func() {

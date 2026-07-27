@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 	"github.com/martincostello/advent-of-go/solver"
 )
 
-func Run(args []string) (puzzles.PuzzleSolution, error) {
+func Run(args []string, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	year, day, raw, err := parse(args)
 	if err != nil {
 		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse arguments: %w", err)
@@ -30,7 +31,7 @@ func Run(args []string) (puzzles.PuzzleSolution, error) {
 
 	started := time.Now()
 
-	solution, err := solver.Solve(input)
+	solution, err := solver.Solve(input, ctx)
 	if err != nil {
 		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to solve puzzle: %w", err)
 	}

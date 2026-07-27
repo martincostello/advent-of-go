@@ -4,6 +4,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -11,7 +12,7 @@ import (
 )
 
 func main() {
-	_, err := cmd.Run(os.Args[1:])
+	_, err := cmd.Run(os.Args[1:], context.Background())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)

@@ -4,6 +4,7 @@
 package y2015_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
@@ -29,5 +30,15 @@ func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
 				t.Errorf("GetLowestPositiveNumberHash(%q, %d) = %d, want %d", tt.secretKey, tt.zeroes, got, tt.want)
 			}
 		})
+	}
+}
+
+func TestY2015Day04IfNoSolution(t *testing.T) {
+	input := "invalid"
+	ctx, cancel := context.WithCancel(t.Context())
+	cancel()
+	_, err := y2015.Day04(input, ctx)
+	if err == nil {
+		t.Fatalf("Day04(%q) did not return an error", input)
 	}
 }

@@ -46,7 +46,7 @@ func TestCmdRun(t *testing.T) {
 				fmt.Sprintf("Day%02d", tt.day),
 				"input.txt",
 			)
-			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input})
+			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input}, t.Context())
 			if err != nil {
 				t.Fatalf("Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
 			}
@@ -68,7 +68,7 @@ func TestCmdRunUnsolved(t *testing.T) {
 			"input.txt",
 		)
 	)
-	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input})
+	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
 	if err == nil {
 		t.Fatalf("Run(%d, %d) did not return an error", year, day)
 	}
@@ -83,7 +83,7 @@ func TestCmdRunInvalidInput(t *testing.T) {
 			"foo.txt",
 		)
 	)
-	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input})
+	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
 	if err == nil {
 		t.Fatalf("Run(%d, %d) did not return an error", year, day)
 	}
