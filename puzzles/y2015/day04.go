@@ -57,8 +57,9 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 	defer cancel()
 
 	maxInt := int(^uint(0) >> 1)
+	limit := maxInt - (parallelism * rangeSize)
 
-	for i := 0; i < maxInt; i += parallelism * rangeSize {
+	for i := 0; i < limit; i += parallelism * rangeSize {
 		solutions := make(chan int, parallelism)
 
 		var wg sync.WaitGroup
@@ -86,6 +87,10 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 		if best != maxInt {
 			return best, nil
 		}
+	}
+
+	if err := ctx.Err(); err != nil {
+		return -1, err
 	}
 
 	return -1, errors.New("no solution was found for the specified secret key")
