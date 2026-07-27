@@ -33,7 +33,7 @@ func solve2015(input *puzzles.PuzzleInput) (puzzles.PuzzleSolution, error) {
 	case 3:
 		return y2015.Day03(input.Input.String()), nil
 	case 4:
-		return y2015.Day04(input.Input.String()), nil
+		return y2015.Day04(input.Input.String())
 	case 5:
 		return y2015.Day05(input.Input.Lines()), nil
 	default:

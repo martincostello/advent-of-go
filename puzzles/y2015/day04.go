@@ -6,6 +6,7 @@ package y2015
 import (
 	"context"
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"sync"
 
@@ -13,39 +14,51 @@ import (
 )
 
 // Day04 solves the puzzle for day 4 of Advent of Code 2015.
-func Day04(input string) puzzles.PuzzleSolution {
+func Day04(input string) (puzzles.PuzzleSolution, error) {
 	var (
-		lowestZeroHash5 int
-		lowestZeroHash6 int
+		err             error
+		lowestZeroHash5 = -1
+		lowestZeroHash6 = -1
 		wg              sync.WaitGroup
 	)
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	wg.Go(func() {
-		lowestZeroHash5 = GetLowestPositiveNumberHash(input, 5)
+		lowestZeroHash5, err = GetLowestPositiveNumberHash(input, 5, ctx)
+		if err != nil {
+			cancel()
+			return
+		}
 	})
 	wg.Go(func() {
-		lowestZeroHash6 = GetLowestPositiveNumberHash(input, 6)
+		lowestZeroHash6, err = GetLowestPositiveNumberHash(input, 6, ctx)
+		if err != nil {
+			cancel()
+			return
+		}
 	})
 	wg.Wait()
 
 	return puzzles.PuzzleSolution{
 		Part1: fmt.Sprint(lowestZeroHash5),
 		Part2: fmt.Sprint(lowestZeroHash6),
-	}
+	}, err
 }
 
-func GetLowestPositiveNumberHash(secretKey string, zeroes int) int {
+func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Context) (int, error) {
 	var (
 		parallelism = 20
 		rangeSize   = 500
 	)
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	maxInt := int(^uint(0) >> 1)
 
-	for i := 0; ; i += parallelism * rangeSize {
+	for i := 0; i < maxInt; i += parallelism * rangeSize {
 		solutions := make(chan int, parallelism)
 
 		var wg sync.WaitGroup
@@ -71,9 +84,11 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int) int {
 		}
 
 		if best != maxInt {
-			return best
+			return best, nil
 		}
 	}
+
+	return -1, errors.New("no solution was found for the specified secret key.")
 }
 
 func searchForSolution(secretKey string, zeroes int, start int, length int, ctx context.Context) int {

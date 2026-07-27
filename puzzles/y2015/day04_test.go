@@ -21,7 +21,10 @@ func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.secretKey, func(t *testing.T) {
-			got := y2015.GetLowestPositiveNumberHash(tt.secretKey, tt.zeroes)
+			got, err := y2015.GetLowestPositiveNumberHash(tt.secretKey, tt.zeroes, t.Context())
+			if err != nil {
+				t.Fatalf("GetLowestPositiveNumberHash(%q, %d) returned error: %v", tt.secretKey, tt.zeroes, err)
+			}
 			if got != tt.want {
 				t.Errorf("GetLowestPositiveNumberHash(%q, %d) = %d, want %d", tt.secretKey, tt.zeroes, got, tt.want)
 			}
