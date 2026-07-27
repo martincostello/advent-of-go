@@ -24,20 +24,22 @@ func Day05(input []string) puzzles.PuzzleSolution {
 }
 
 func IsNiceV1(value string) bool {
-	if containsAny(value, &notNice) {
+	if containsAny(value, notNice) {
 		return false
 	}
 
 	vowels := 0
 	hasAnyConsecutiveLetters := false
 
-	for i, ch := range value {
-		if isVowel(ch) {
+	for i := 0; i < len(value); i++ {
+		ch := value[i]
+
+		if isVowel(rune(ch)) {
 			vowels++
 		}
 
 		if i > 0 && !hasAnyConsecutiveLetters {
-			hasAnyConsecutiveLetters = byte(ch) == value[i-1]
+			hasAnyConsecutiveLetters = ch == value[i-1]
 		}
 
 		if hasAnyConsecutiveLetters && vowels > 2 {
@@ -98,8 +100,8 @@ func count(values []string, predicate func(string) bool) int {
 	return count
 }
 
-func containsAny(value string, values *[]string) bool {
-	for _, v := range *values {
+func containsAny(value string, values []string) bool {
+	for _, v := range values {
 		if strings.Contains(value, v) {
 			return true
 		}
