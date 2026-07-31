@@ -110,7 +110,10 @@ func BenchmarkCmdRun(b *testing.B) {
 			}
 
 			for b.Loop() {
-				solver.Solve(input, b.Context())
+				_, err = solver.Solve(input, b.Context())
+				if err != nil {
+					b.Fatalf("Solve(%d, %d) returned an error: %v", tt.year, tt.day, err)
+				}
 			}
 		})
 	}
