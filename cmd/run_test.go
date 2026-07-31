@@ -15,6 +15,7 @@ import (
 
 	"github.com/martincostello/advent-of-go/cmd"
 	"github.com/martincostello/advent-of-go/puzzles"
+	"github.com/martincostello/advent-of-go/solver"
 )
 
 var (
@@ -27,21 +28,23 @@ var (
 	)
 )
 
-func TestCmdRun(t *testing.T) {
-	tests := []struct {
-		year int
-		day  int
-		want puzzles.PuzzleSolution
-	}{
-		{2015, 1, puzzles.PuzzleSolution{Part1: "232", Part2: "1783"}},
-		{2015, 2, puzzles.PuzzleSolution{Part1: "1598415", Part2: "3812909"}},
-		{2015, 3, puzzles.PuzzleSolution{Part1: "2565", Part2: "2639"}},
-		{2015, 4, puzzles.PuzzleSolution{Part1: "346386", Part2: "9958218"}},
-		{2015, 5, puzzles.PuzzleSolution{Part1: "236", Part2: "51"}},
-	}
+var tests = []struct {
+	year int
+	day  int
+	want puzzles.PuzzleSolution
+}{
+	{2015, 1, puzzles.PuzzleSolution{Part1: "232", Part2: "1783"}},
+	{2015, 2, puzzles.PuzzleSolution{Part1: "1598415", Part2: "3812909"}},
+	{2015, 3, puzzles.PuzzleSolution{Part1: "2565", Part2: "2639"}},
+	{2015, 4, puzzles.PuzzleSolution{Part1: "346386", Part2: "9958218"}},
+	{2015, 5, puzzles.PuzzleSolution{Part1: "236", Part2: "51"}},
+}
 
+func TestCmdRun(t *testing.T) {
+	t.Parallel()
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(t *testing.T) {
+			t.Parallel()
 			input := filepath.Join(
 				inputDir,
 				fmt.Sprintf("Y%d", tt.year),
@@ -83,4 +86,36 @@ func TestCmdRunInvalidInput(t *testing.T) {
 	)
 	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
+}
+
+func BenchmarkCmdRun(b *testing.B) {
+	for _, tt := range tests {
+		b.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(b *testing.B) {
+			inputFile := filepath.Join(
+				inputDir,
+				fmt.Sprintf("Y%d", tt.year),
+				fmt.Sprintf("Day%02d", tt.day),
+				"input.txt",
+			)
+
+			year, day, raw, err := cmd.Parse([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile})
+			require.NoError(b, err, "Parse(%d, %d) returned an error: %v", tt.year, tt.day, err)
+
+			data := puzzles.PuzzleData(raw)
+
+			var input = &puzzles.PuzzleInput{
+				Year:  year,
+				Day:   day,
+				Input: &data,
+			}
+
+			b.ResetTimer()
+			for b.Loop() {
+				_, err = solver.Solve(input, b.Context())
+				if err != nil {
+					b.Fatalf("Solve(%d, %d) returned an error: %v", tt.year, tt.day, err)
+				}
+			}
+		})
+	}
 }
