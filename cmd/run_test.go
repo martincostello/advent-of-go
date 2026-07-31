@@ -41,8 +41,10 @@ var tests = []struct {
 }
 
 func TestCmdRun(t *testing.T) {
+	t.Parallel()
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(t *testing.T) {
+			t.Parallel()
 			input := filepath.Join(
 				inputDir,
 				fmt.Sprintf("Y%d", tt.year),
