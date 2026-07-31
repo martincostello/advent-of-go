@@ -46,13 +46,14 @@ func Parse(args []string) (*Options, error) {
 	if flags.NArg() < 1 {
 		err = fmt.Errorf("no input file specified")
 		return nil, err
-	} else {
-		path := flags.Arg(0)
-		options.Input, err = os.ReadFile(path)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "reading file %q failed: %v\n", path, err)
-			return nil, err
-		}
+	}
+
+	path := flags.Arg(0)
+	options.Input, err = os.ReadFile(path)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "reading file %q failed: %v\n", path, err)
+		return nil, err
 	}
 
 	return options, nil
