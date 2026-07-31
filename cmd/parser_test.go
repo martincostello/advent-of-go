@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/martincostello/advent-of-go/cmd"
 )
 
@@ -26,15 +28,9 @@ func TestCmdParseWhenValidFlags(t *testing.T) {
 
 	args := []string{"--day", "1", "--year", "2015", input}
 	year, day, _, err := cmd.Parse(args)
-	if err != nil {
-		t.Fatalf("Parse(%v) returned an error", args)
-	}
-	if day != 1 {
-		t.Errorf("Parse(%v) day = %d, want 1", args, day)
-	}
-	if year != 2015 {
-		t.Errorf("Parse(%v) year = %d, want 2015", args, year)
-	}
+	require.NoError(t, err, "Parse(%v) returned an error", args)
+	require.Equal(t, 1, day, "Parse(%v) day = %d, want 1", args, day)
+	require.Equal(t, 2015, year, "Parse(%v) year = %d, want 2015", args, year)
 }
 
 func TestCmdParseWhenInvalidFlag(t *testing.T) {
@@ -49,9 +45,7 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(strings.Join(tt.args, " "), func(t *testing.T) {
 			_, _, _, err := cmd.Parse(tt.args)
-			if err == nil {
-				t.Fatalf("Parse(%v) did not return an error", tt.args)
-			}
+			require.Error(t, err, "Parse(%v) did not return an error", tt.args)
 		})
 	}
 }
@@ -59,7 +53,5 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 func TestCmdParseWhenNoInputFileSpecified(t *testing.T) {
 	args := []string{"--day", "1", "--year", "2015"}
 	_, _, _, err := cmd.Parse(args)
-	if err == nil {
-		t.Fatalf("Parse(%v) did not return an error", args)
-	}
+	require.Error(t, err, "Parse(%v) did not return an error", args)
 }

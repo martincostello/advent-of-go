@@ -11,6 +11,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/stretchr/testify/require"
+
 	"github.com/martincostello/advent-of-go/cmd"
 	"github.com/martincostello/advent-of-go/puzzles"
 )
@@ -47,9 +49,7 @@ func TestCmdRun(t *testing.T) {
 				"input.txt",
 			)
 			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input}, t.Context())
-			if err != nil {
-				t.Fatalf("Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
-			}
+			require.NoError(t, err, "Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
 			}
@@ -69,9 +69,7 @@ func TestCmdRunUnsolved(t *testing.T) {
 		)
 	)
 	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
-	if err == nil {
-		t.Fatalf("Run(%d, %d) did not return an error", year, day)
-	}
+	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }
 
 func TestCmdRunInvalidInput(t *testing.T) {
@@ -84,7 +82,5 @@ func TestCmdRunInvalidInput(t *testing.T) {
 		)
 	)
 	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
-	if err == nil {
-		t.Fatalf("Run(%d, %d) did not return an error", year, day)
-	}
+	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }

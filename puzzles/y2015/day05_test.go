@@ -6,6 +6,8 @@ package y2015_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )
 
@@ -27,9 +29,7 @@ func TestY2015IsNiceV1(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
 			got := y2015.IsNiceV1(tt.value)
-			if got != tt.want {
-				t.Errorf("IsNiceV1(%q) = %t, want %t", tt.value, got, tt.want)
-			}
+			require.Equal(t, tt.want, got, "IsNiceV1(%q) = %t, want %t", tt.value, got, tt.want)
 		})
 	}
 }
@@ -48,9 +48,7 @@ func TestY2015IsNiceV2(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
 			got := y2015.IsNiceV2(tt.value)
-			if got != tt.want {
-				t.Errorf("IsNiceV2(%q) = %t, want %t", tt.value, got, tt.want)
-			}
+			require.Equal(t, tt.want, got, "IsNiceV2(%q) = %t, want %t", tt.value, got, tt.want)
 		})
 	}
 }
@@ -72,9 +70,7 @@ func TestY2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
 			got := y2015.HasPairOfLettersWithMoreThanOneOccurrence(tt.value)
-			if got != tt.want {
-				t.Errorf("HasPairOfLettersWithMoreThanOneOccurrence(%q) = %t, want %t", tt.value, got, tt.want)
-			}
+			require.Equal(t, tt.want, got, "HasPairOfLettersWithMoreThanOneOccurrence(%q) = %t, want %t", tt.value, got, tt.want)
 		})
 	}
 }
@@ -94,9 +90,7 @@ func TestY2015HasLetterThatIsTheBreadOfALetterSandwich(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
 			got := y2015.HasLetterThatIsTheBreadOfALetterSandwich(tt.value)
-			if got != tt.want {
-				t.Errorf("HasLetterThatIsTheBreadOfALetterSandwich(%q) = %t, want %t", tt.value, got, tt.want)
-			}
+			require.Equal(t, tt.want, got, "HasLetterThatIsTheBreadOfALetterSandwich(%q) = %t, want %t", tt.value, got, tt.want)
 		})
 	}
 }
