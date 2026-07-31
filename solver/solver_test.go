@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/solver"
 )
@@ -24,9 +26,7 @@ func TestSolverSolveWhenUnsolved(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("%d-%02d", tt.input.Year, tt.input.Day), func(t *testing.T) {
 			_, err := solver.Solve(&tt.input, t.Context())
-			if err == nil {
-				t.Fatalf("Solve(%v#) did not return an error", tt.input)
-			}
+			require.Error(t, err, "Solve(%v#) did not return an error", tt.input)
 		})
 	}
 }

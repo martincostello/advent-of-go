@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
 	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/puzzles/y2015"
 )

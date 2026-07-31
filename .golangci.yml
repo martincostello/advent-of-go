@@ -1,5 +1,18 @@
 version: "2"
 
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/martincostello/advent-of-go
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
 linters:
   default: standard
   enable:
@@ -7,8 +20,3 @@ linters:
     - misspell
     - unconvert
     - unused
-
-formatters:
-  enable:
-    - gofmt
-    - goimports
