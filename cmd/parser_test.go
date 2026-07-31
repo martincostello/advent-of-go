@@ -27,10 +27,10 @@ func TestCmdParseWhenValidFlags(t *testing.T) {
 	)
 
 	args := []string{"--day", "1", "--year", "2015", input}
-	year, day, _, err := cmd.Parse(args)
+	options, err := cmd.Parse(args)
 	require.NoError(t, err, "Parse(%v) returned an error", args)
-	require.Equal(t, 1, day, "Parse(%v) day = %d, want 1", args, day)
-	require.Equal(t, 2015, year, "Parse(%v) year = %d, want 2015", args, year)
+	require.Equal(t, 1, options.Day, "Parse(%v) day = %d, want 1", args, options.Day)
+	require.Equal(t, 2015, options.Year, "Parse(%v) year = %d, want 2015", args, options.Year)
 }
 
 func TestCmdParseWhenInvalidFlag(t *testing.T) {
@@ -44,7 +44,7 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strings.Join(tt.args, " "), func(t *testing.T) {
-			_, _, _, err := cmd.Parse(tt.args)
+			_, err := cmd.Parse(tt.args)
 			require.Error(t, err, "Parse(%v) did not return an error", tt.args)
 		})
 	}
@@ -52,6 +52,6 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 
 func TestCmdParseWhenNoInputFileSpecified(t *testing.T) {
 	args := []string{"--day", "1", "--year", "2015"}
-	_, _, _, err := cmd.Parse(args)
+	_, err := cmd.Parse(args)
 	require.Error(t, err, "Parse(%v) did not return an error", args)
 }
