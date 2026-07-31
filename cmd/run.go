@@ -13,19 +13,19 @@ import (
 )
 
 func Run(args []string, ctx context.Context) (puzzles.PuzzleSolution, error) {
-	year, day, raw, err := Parse(args)
+	options, err := Parse(args)
 	if err != nil {
 		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse arguments: %w", err)
 	}
 
-	fmt.Printf("Solving Advent of Code for day %02d of %04d\n", day, year)
+	fmt.Printf("Solving Advent of Code for day %02d of %04d\n", options.Day, options.Year)
 	fmt.Println()
 
-	data := puzzles.PuzzleData(raw)
+	data := puzzles.PuzzleData(options.Input)
 
 	var input = &puzzles.PuzzleInput{
-		Year:  year,
-		Day:   day,
+		Year:  options.Year,
+		Day:   options.Day,
 		Input: &data,
 	}
 

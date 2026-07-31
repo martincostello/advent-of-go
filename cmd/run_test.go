@@ -98,14 +98,14 @@ func BenchmarkCmdRun(b *testing.B) {
 				"input.txt",
 			)
 
-			year, day, raw, err := cmd.Parse([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile})
+			options, err := cmd.Parse([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile})
 			require.NoError(b, err, "Parse(%d, %d) returned an error: %v", tt.year, tt.day, err)
 
-			data := puzzles.PuzzleData(raw)
+			data := puzzles.PuzzleData(options.Input)
 
 			var input = &puzzles.PuzzleInput{
-				Year:  year,
-				Day:   day,
+				Year:  options.Year,
+				Day:   options.Day,
 				Input: &data,
 			}
 
