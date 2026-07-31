@@ -29,8 +29,8 @@ func TestCmdParseWhenValidFlags(t *testing.T) {
 	args := []string{"--day", "1", "--year", "2015", input}
 	year, day, _, err := cmd.Parse(args)
 	require.NoError(t, err, "Parse(%v) returned an error", args)
-	require.Equal(t, day, 1, "Parse(%v) day = %d, want 1", args, day)
-	require.Equal(t, year, 2015, "Parse(%v) year = %d, want 2015", args, year)
+	require.Equal(t, 1, day, "Parse(%v) day = %d, want 1", args, day)
+	require.Equal(t, 2015, year, "Parse(%v) year = %d, want 2015", args, year)
 }
 
 func TestCmdParseWhenInvalidFlag(t *testing.T) {
