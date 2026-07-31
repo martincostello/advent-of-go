@@ -3,7 +3,7 @@ param()
 
 $ErrorActionPreference = "Stop"
 
-go test -benchmem -run=^$ -bench "^BenchmarkCmdRun$" "github.com/martincostello/advent-of-go/cmd" -memprofile=mem.out -run=' '
+go test -benchmem -run=^$ -bench "^BenchmarkCmdRun$" "github.com/martincostello/advent-of-go/cmd" -count=5 -memprofile=mem.out -run=' '
 
 if ($LASTEXITCODE -ne 0) {
     throw "go test -bench failed"
