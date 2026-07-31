@@ -109,6 +109,7 @@ func BenchmarkCmdRun(b *testing.B) {
 				Input: &data,
 			}
 
+			b.ResetTimer()
 			for b.Loop() {
 				_, err = solver.Solve(input, b.Context())
 				if err != nil {

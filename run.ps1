@@ -1,4 +1,4 @@
-#! /usr/bin/env pwsh
+#!/usr/bin/env pwsh
 param(
     [Parameter(Mandatory = $true)][int] $Day,
     [Parameter(Mandatory = $true)][int] $Year,
