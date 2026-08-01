@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
@@ -63,8 +64,8 @@ func TestCmdRun(t *testing.T) {
 
 func TestCmdRunUnsolved(t *testing.T) {
 	var (
-		year  = 2001
-		day   = 42
+		year  = time.Now().Year()
+		day   = 25
 		input = filepath.Join(
 			inputDir,
 			"Y2015",
