@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -45,24 +46,27 @@ var tests = []struct {
 func TestCmdRun(t *testing.T) {
 	t.Parallel()
 	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(t *testing.T) {
+		c := tt
+		t.Run(fmt.Sprintf("%d-%02d", c.year, c.day), func(t *testing.T) {
 			t.Parallel()
 			input := filepath.Join(
 				inputDir,
-				fmt.Sprintf("Y%d", tt.year),
-				fmt.Sprintf("Day%02d", tt.day),
+				fmt.Sprintf("Y%d", c.year),
+				fmt.Sprintf("Day%02d", c.day),
 				"input.txt",
 			)
-			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input}, t.Context())
-			require.NoError(t, err, "Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
-			if diff := cmp.Diff(tt.want, *got); diff != "" {
-				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
+			env := newEnv("--year", strconv.Itoa(c.year), "--day", strconv.Itoa(c.day), input)
+			got, err := cmd.Run(env, t.Context())
+			require.NoError(t, err, "Run(%d, %d) returned an error: %v", c.year, c.day, err)
+			if diff := cmp.Diff(c.want, *got); diff != "" {
+				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", c.year, c.day, diff)
 			}
 		})
 	}
 }
 
 func TestCmdRunUnsolved(t *testing.T) {
+	t.Parallel()
 	var (
 		year  = time.Now().Year()
 		day   = 25
@@ -72,12 +76,14 @@ func TestCmdRunUnsolved(t *testing.T) {
 			"Day01",
 			"input.txt",
 		)
+		env = newEnv("--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input)
 	)
-	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
+	_, err := cmd.Run(env, t.Context())
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }
 
 func TestCmdRunInputFileNotFound(t *testing.T) {
+	t.Parallel()
 	var (
 		year  = 2015
 		day   = 1
@@ -86,12 +92,26 @@ func TestCmdRunInputFileNotFound(t *testing.T) {
 			"foo.txt",
 		)
 	)
-	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
+	env := newEnv("--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input)
+	_, err := cmd.Run(env, t.Context())
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }
 
 func TestCmdRunInvalidFlag(t *testing.T) {
-	_, err := cmd.Run([]string{"--year", "2014", "--day", "1", "foo.txt"}, t.Context())
+	t.Parallel()
+	env := newEnv("--year", "2014", "--day", "1", "foo.txt")
+	_, err := cmd.Run(env, t.Context())
+	require.Error(t, err)
+}
+
+func TestCmdRunNoOutput(t *testing.T) {
+	t.Parallel()
+	var env = &cmd.Environment{
+		Args:   []string{"--help"},
+		Stdout: nil,
+		Stderr: nil,
+	}
+	_, err := cmd.Run(env, t.Context())
 	require.Error(t, err)
 }
 
@@ -105,7 +125,10 @@ func BenchmarkCmdRun(b *testing.B) {
 				"input.txt",
 			)
 
-			options, err := cmd.Parse([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile})
+			env := newEnv("--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile)
+
+			var stderr strings.Builder
+			options, err := cmd.Parse(&stderr, env.Args...)
 			require.NoError(b, err, "Parse(%d, %d) returned an error: %v", tt.year, tt.day, err)
 
 			bytes, err := os.ReadFile(options.FileName)
@@ -127,5 +150,15 @@ func BenchmarkCmdRun(b *testing.B) {
 				}
 			}
 		})
+	}
+}
+
+func newEnv(args ...string) *cmd.Environment {
+	var stdout strings.Builder
+	var stderr strings.Builder
+	return &cmd.Environment{
+		Args:   args,
+		Stdout: &stdout,
+		Stderr: &stderr,
 	}
 }

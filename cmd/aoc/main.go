@@ -5,6 +5,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"flag"
 	"fmt"
 	"os"
 
@@ -12,8 +14,15 @@ import (
 )
 
 func main() {
-	_, err := cmd.Run(os.Args[1:], context.Background())
+	_, err := cmd.Run(&cmd.Environment{
+		Args:   os.Args[1:],
+		Stdout: os.Stdout,
+		Stderr: os.Stderr,
+	}, context.Background())
 	if err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			os.Exit(1)
+		}
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}

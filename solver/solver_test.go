@@ -14,6 +14,7 @@ import (
 )
 
 func TestSolverSolveWhenUnsolved(t *testing.T) {
+	t.Parallel()
 	var data puzzles.PuzzleData = []byte("invalid")
 	tests := []struct {
 		input puzzles.PuzzleInput
@@ -24,9 +25,11 @@ func TestSolverSolveWhenUnsolved(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%d-%02d", tt.input.Year, tt.input.Day), func(t *testing.T) {
-			_, err := solver.Solve(&tt.input, t.Context())
-			require.Error(t, err, "Solve(%v#) did not return an error", tt.input)
+		c := tt
+		t.Run(fmt.Sprintf("%d-%02d", c.input.Year, c.input.Day), func(t *testing.T) {
+			t.Parallel()
+			_, err := solver.Solve(&c.input, t.Context())
+			require.Error(t, err, "Solve(%v#) did not return an error", c.input)
 		})
 	}
 }

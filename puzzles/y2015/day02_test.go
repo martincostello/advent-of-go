@@ -14,6 +14,7 @@ import (
 )
 
 func TestY2015Day02(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input []string
 		want  puzzles.PuzzleSolution
@@ -23,17 +24,20 @@ func TestY2015Day02(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.input[0], func(t *testing.T) {
-			got, err := y2015.Day02(tt.input)
-			require.NoError(t, err, "Day02(%q) returned error: %v", tt.input, err)
-			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("Day02(%q) mismatch (-want +got):\n%s", tt.input, diff)
+		c := tt
+		t.Run(c.input[0], func(t *testing.T) {
+			t.Parallel()
+			got, err := y2015.Day02(c.input)
+			require.NoError(t, err, "Day02(%q) returned error: %v", c.input, err)
+			if diff := cmp.Diff(c.want, got); diff != "" {
+				t.Errorf("Day02(%q) mismatch (-want +got):\n%s", c.input, diff)
 			}
 		})
 	}
 }
 
 func TestY2015Day02RejectsInvalidDimensions(t *testing.T) {
+	t.Parallel()
 	input := []string{"2x3x4", "1x1x10", "invalid"}
 	_, err := y2015.Day02(input)
 	require.Error(t, err, "Day02(%q) did not return an error", input)
