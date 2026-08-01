@@ -8,4 +8,4 @@ coverage:
         if_not_found: failure
 
 ignore:
-  - "main.go"
+  - "cmd/aoc/main.go"
