@@ -50,6 +50,8 @@ func Parse(args []string) (*Options, error) {
 	options.Input = flags.Arg(0)
 
 	if err := validate(options, now.Year()); err != nil {
+		fmt.Fprintln(flags.Output(), err)
+		flags.Usage()
 		return nil, err
 	}
 
