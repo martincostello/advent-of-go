@@ -29,7 +29,7 @@ func Parse(args []string) (*Options, error) {
 		FileName: "",
 	}
 
-	flags := flag.NewFlagSet("advent-of-go", flag.ContinueOnError)
+	flags := flag.NewFlagSet("aoc", flag.ContinueOnError)
 	flags.SetOutput(os.Stdout)
 
 	flags.IntVar(&options.Year, "year", options.Year, "Year of the puzzle")
