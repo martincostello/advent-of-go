@@ -5,6 +5,7 @@ package cmd_test
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -101,7 +102,10 @@ func BenchmarkCmdRun(b *testing.B) {
 			options, err := cmd.Parse([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile})
 			require.NoError(b, err, "Parse(%d, %d) returned an error: %v", tt.year, tt.day, err)
 
-			data := puzzles.PuzzleData(options.Input)
+			bytes, err := os.ReadFile(options.FileName)
+			require.NoError(b, err)
+
+			data := puzzles.PuzzleData(bytes)
 
 			var input = &puzzles.PuzzleInput{
 				Year:  options.Year,

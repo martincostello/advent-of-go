@@ -19,10 +19,10 @@ func Run(args []string, ctx context.Context) (*puzzles.PuzzleSolution, error) {
 		return nil, err
 	}
 
-	bytes, err := os.ReadFile(options.Input)
+	bytes, err := os.ReadFile(options.FileName)
 
 	if err != nil {
-		return nil, fmt.Errorf("reading file %q failed: %w", options.Input, err)
+		return nil, fmt.Errorf("reading file %q failed: %w", options.FileName, err)
 	}
 
 	fmt.Printf("Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)

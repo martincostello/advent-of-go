@@ -13,9 +13,9 @@ import (
 )
 
 type Options struct {
-	Year  int
-	Day   int
-	Input string
+	Year     int
+	Day      int
+	FileName string
 }
 
 // Parse parses the command-line flags and input for the application,
@@ -24,9 +24,9 @@ func Parse(args []string) (*Options, error) {
 	now := time.Now().Local()
 
 	options := &Options{
-		Year:  now.Year(),
-		Day:   int(math.Min(float64(now.Day()), 25)),
-		Input: "",
+		Year:     now.Year(),
+		Day:      int(math.Min(float64(now.Day()), 25)),
+		FileName: "",
 	}
 
 	flags := flag.NewFlagSet("advent-of-go", flag.ContinueOnError)
@@ -48,7 +48,7 @@ func Parse(args []string) (*Options, error) {
 		return nil, err
 	}
 
-	options.Input = flags.Arg(0)
+	options.FileName = flags.Arg(0)
 
 	if err := validate(options, now.Year()); err != nil {
 		_, _ = fmt.Fprintln(flags.Output(), err)
@@ -68,7 +68,7 @@ func validate(options *Options, year int) error {
 		return fmt.Errorf("invalid day: %d", options.Day)
 	}
 
-	if options.Input == "" {
+	if options.FileName == "" {
 		return fmt.Errorf("no input file specified")
 	}
 
