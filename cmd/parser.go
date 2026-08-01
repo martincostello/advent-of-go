@@ -20,9 +20,6 @@ type Options struct {
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
 func Parse(args []string) (*Options, error) {
-	flags := flag.NewFlagSet("advent-of-go", flag.ContinueOnError)
-	flags.SetOutput(os.Stdout)
-
 	now := time.Now().Local()
 
 	options := &Options{
@@ -30,6 +27,9 @@ func Parse(args []string) (*Options, error) {
 		Day:   int(math.Max(1, math.Min(float64(now.Day()), 25))),
 		Input: nil,
 	}
+
+	flags := flag.NewFlagSet("advent-of-go", flag.ContinueOnError)
+	flags.SetOutput(os.Stdout)
 
 	flags.IntVar(&options.Year, "year", options.Year, "Year of the puzzle")
 	flags.IntVar(&options.Day, "day", options.Day, "Day of the puzzle")
@@ -45,21 +45,19 @@ func Parse(args []string) (*Options, error) {
 		if err == flag.ErrHelp {
 			os.Exit(0)
 		}
-		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
-		return nil, err
-	}
-
-	if flags.NArg() < 1 {
-		err = fmt.Errorf("no input file specified")
 		return nil, err
 	}
 
 	path := flags.Arg(0)
+
+	if path == "" {
+		return nil, fmt.Errorf("no input file specified")
+	}
+
 	options.Input, err = os.ReadFile(path)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "reading file %q failed: %v\n", path, err)
-		return nil, err
+		return nil, fmt.Errorf("reading file %q failed: %v\n", path, err)
 	}
 
 	return options, nil

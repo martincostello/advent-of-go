@@ -53,7 +53,7 @@ func TestCmdRun(t *testing.T) {
 			)
 			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input}, t.Context())
 			require.NoError(t, err, "Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
-			if diff := cmp.Diff(tt.want, got); diff != "" {
+			if diff := cmp.Diff(tt.want, *got); diff != "" {
 				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
 			}
 		})
