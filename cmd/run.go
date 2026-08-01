@@ -6,6 +6,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/martincostello/advent-of-go/puzzles"
@@ -18,10 +19,15 @@ func Run(args []string, ctx context.Context) (*puzzles.PuzzleSolution, error) {
 		return nil, err
 	}
 
-	fmt.Printf("Solving Advent of Code for day %02d of %04d\n", options.Day, options.Year)
-	fmt.Println()
+	bytes, err := os.ReadFile(options.Input)
 
-	data := puzzles.PuzzleData(options.Input)
+	if err != nil {
+		return nil, fmt.Errorf("reading file %q failed: %v\n", options.Input, err)
+	}
+
+	fmt.Printf("Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)
+
+	data := puzzles.PuzzleData(bytes)
 
 	var input = &puzzles.PuzzleInput{
 		Year:  options.Year,
