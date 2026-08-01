@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"math"
@@ -41,7 +42,7 @@ func Parse(args []string) (*Options, error) {
 	}
 
 	if err := flags.Parse(args); err != nil {
-		if err == flag.ErrHelp {
+		if errors.Is(err, flag.ErrHelp) {
 			os.Exit(0)
 		}
 		return nil, err
