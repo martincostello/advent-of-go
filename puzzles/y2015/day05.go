@@ -73,18 +73,21 @@ func HasPairOfLettersWithMoreThanOneOccurrence(s string) bool {
 		return false
 	}
 
-	pairs := make(map[string]int, len(s)-1)
+	var lastIndex [26 * 26]int
+	for i := range lastIndex {
+		lastIndex[i] = -1
+	}
 
 	for i := 0; i < len(s)-1; i++ {
-		pair := s[i : i+2]
-		if j, ok := pairs[pair]; ok {
+		key := int(s[i]-'a')*26 + int(s[i+1]-'a')
+		if j := lastIndex[key]; j != -1 {
 			if i-j >= 2 {
 				return true
 			}
 			continue
 		}
 
-		pairs[pair] = i
+		lastIndex[key] = i
 	}
 
 	return false
