@@ -17,25 +17,30 @@ import (
 )
 
 func TestCmdParseWhenValidFlags(t *testing.T) {
+	t.Parallel()
 	_, file, _, _ := runtime.Caller(0)
-	root := filepath.Dir(file)
-	input := filepath.Join(
-		root,
-		"..",
-		"input",
-		"Y2015",
-		"Day01",
-		"input.txt",
+
+	var (
+		root  = filepath.Dir(file)
+		input = filepath.Join(
+			root,
+			"..",
+			"input",
+			"Y2015",
+			"Day01",
+			"input.txt",
+		)
+		env = newEnv("--day", "1", "--year", "2015", input)
 	)
 
-	args := []string{"--day", "1", "--year", "2015", input}
-	options, err := cmd.Parse(args)
-	require.NoError(t, err, "Parse(%v) returned an error", args)
-	require.Equal(t, 1, options.Day, "Parse(%v) day = %d, want 1", args, options.Day)
-	require.Equal(t, 2015, options.Year, "Parse(%v) year = %d, want 2015", args, options.Year)
+	options, err := cmd.Parse(env.Stderr, env.Args...)
+	require.NoError(t, err, "Parse(%v) returned an error", env.Args)
+	require.Equal(t, 1, options.Day, "Parse(%v) day = %d, want 1", env.Args, options.Day)
+	require.Equal(t, 2015, options.Year, "Parse(%v) year = %d, want 2015", env.Args, options.Year)
 }
 
 func TestCmdParseWhenInvalidFlag(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		args []string
 	}{
@@ -50,14 +55,24 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(strings.Join(tt.args, " "), func(t *testing.T) {
-			_, err := cmd.Parse(tt.args)
-			require.Error(t, err, "Parse(%v) did not return an error", tt.args)
+			t.Parallel()
+			env := newEnv(tt.args...)
+			_, err := cmd.Parse(env.Stderr, env.Args...)
+			require.Error(t, err, "Parse(%v) did not return an error", env.Args)
 		})
 	}
 }
 
 func TestCmdParseWhenNoInputFileSpecified(t *testing.T) {
-	args := []string{"--day", "1", "--year", "2015"}
-	_, err := cmd.Parse(args)
-	require.Error(t, err, "Parse(%v) did not return an error", args)
+	t.Parallel()
+	env := newEnv("--day", "1", "--year", "2015")
+	_, err := cmd.Parse(env.Stderr, env.Args...)
+	require.Error(t, err, "Parse(%v) did not return an error", env.Args)
+}
+
+func TestCmdParseHelpSpecified(t *testing.T) {
+	t.Parallel()
+	env := newEnv("--help")
+	_, err := cmd.Parse(env.Stderr, env.Args...)
+	require.Error(t, err, "Parse(%v) did not return an error", env.Args)
 }

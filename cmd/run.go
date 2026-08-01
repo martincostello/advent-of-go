@@ -6,6 +6,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -13,8 +14,14 @@ import (
 	"github.com/martincostello/advent-of-go/solver"
 )
 
-func Run(args []string, ctx context.Context) (*puzzles.PuzzleSolution, error) {
-	options, err := Parse(args)
+type Environment struct {
+	Args   []string
+	Stdout io.Writer
+	Stderr io.Writer
+}
+
+func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error) {
+	options, err := Parse(env.Stderr, env.Args...)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +32,7 @@ func Run(args []string, ctx context.Context) (*puzzles.PuzzleSolution, error) {
 		return nil, fmt.Errorf("reading file %q failed: %w", options.FileName, err)
 	}
 
-	fmt.Printf("Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)
+	fmt.Fprintf(env.Stdout, "Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)
 
 	data := puzzles.PuzzleData(bytes)
 
@@ -44,15 +51,15 @@ func Run(args []string, ctx context.Context) (*puzzles.PuzzleSolution, error) {
 
 	ended := time.Now()
 
-	fmt.Printf("Part 1: %s\n", solution.Part1)
-	fmt.Printf("Part 2: %s\n", solution.Part2)
+	fmt.Fprintf(env.Stdout, "Part 1: %s\n", solution.Part1)
+	fmt.Fprintf(env.Stdout, "Part 2: %s\n", solution.Part2)
 
 	if len(solution.Visualization) > 0 {
-		fmt.Printf("Visualization:\n%s\n", solution.Visualization)
+		fmt.Fprintf(env.Stdout, "Visualization:\n%s\n", solution.Visualization)
 	}
 
-	fmt.Println()
-	fmt.Printf("Solved in %s\n", ended.Sub(started))
+	fmt.Fprintln(env.Stdout)
+	fmt.Fprintf(env.Stdout, "Solved in %s\n", ended.Sub(started))
 
 	return &solution, nil
 }

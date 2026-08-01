@@ -5,16 +5,24 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"errors"
+	"flag"
 	"os"
 
 	"github.com/martincostello/advent-of-go/cmd"
 )
 
 func main() {
-	_, err := cmd.Run(os.Args[1:], context.Background())
+	_, err := cmd.Run(&cmd.Environment{
+		Args:   os.Args[1:],
+		Stdout: os.Stdout,
+		Stderr: os.Stderr,
+	}, context.Background())
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		exitCode := 1
+		if errors.Is(err, flag.ErrHelp) {
+			exitCode = 0
+		}
+		os.Exit(exitCode)
 	}
 }

@@ -4,11 +4,10 @@
 package cmd
 
 import (
-	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"math"
-	"os"
 	"time"
 )
 
@@ -20,7 +19,7 @@ type Options struct {
 
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
-func Parse(args []string) (*Options, error) {
+func Parse(stderr io.Writer, args ...string) (*Options, error) {
 	now := time.Now().Local()
 
 	options := &Options{
@@ -30,28 +29,25 @@ func Parse(args []string) (*Options, error) {
 	}
 
 	flags := flag.NewFlagSet("aoc", flag.ContinueOnError)
-	flags.SetOutput(os.Stdout)
+	flags.SetOutput(stderr)
 
 	flags.IntVar(&options.Year, "year", options.Year, "Year of the puzzle")
 	flags.IntVar(&options.Day, "day", options.Day, "Day of the puzzle")
 
 	flags.Usage = func() {
 		flags.Output()
-		fmt.Fprintf(os.Stderr, "Usage: %s [options] <file>\n", flags.Name())
+		fmt.Fprintf(stderr, "Usage: %s [options] <file>\n", flags.Name())
 		flags.PrintDefaults()
 	}
 
 	if err := flags.Parse(args); err != nil {
-		if errors.Is(err, flag.ErrHelp) {
-			os.Exit(0)
-		}
 		return nil, err
 	}
 
 	options.FileName = flags.Arg(0)
 
 	if err := validate(options, now.Year()); err != nil {
-		_, _ = fmt.Fprintln(flags.Output(), err)
+		_, _ = fmt.Fprintln(stderr, err)
 		flags.Usage()
 		return nil, err
 	}
