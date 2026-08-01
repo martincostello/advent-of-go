@@ -5,7 +5,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-go test -benchmem -run=^$ -bench "^BenchmarkCmdRun$" "github.com/martincostello/advent-of-go/cmd" -count="$Count" -memprofile=mem.out
+$path = Join-Path $PSScriptRoot "cmd"
+
+go test -benchmem -run=^$ -bench "^BenchmarkCmdRun$" $path -count="$Count" -memprofile=mem.out
 
 if ($LASTEXITCODE -ne 0) {
     throw "go test -bench failed"
