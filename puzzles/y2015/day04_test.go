@@ -13,6 +13,7 @@ import (
 )
 
 func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		secretKey string
 		zeroes    int
@@ -24,6 +25,7 @@ func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.secretKey, func(t *testing.T) {
+			t.Parallel()
 			got, err := y2015.GetLowestPositiveNumberHash(tt.secretKey, tt.zeroes, t.Context())
 			require.NoError(t, err, "GetLowestPositiveNumberHash(%q, %d) returned error: %v", tt.secretKey, tt.zeroes, err)
 			require.Equal(t, tt.want, got, "GetLowestPositiveNumberHash(%q, %d) = %d, want %d", tt.secretKey, tt.zeroes, got, tt.want)
@@ -32,6 +34,7 @@ func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
 }
 
 func TestY2015Day04IfNoSolution(t *testing.T) {
+	t.Parallel()
 	input := "invalid"
 	ctx, cancel := context.WithCancel(t.Context())
 	cancel()

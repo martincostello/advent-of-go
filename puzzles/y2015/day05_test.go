@@ -12,6 +12,7 @@ import (
 )
 
 func TestY2015IsNiceV1(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		value string
 		want  bool
@@ -28,6 +29,7 @@ func TestY2015IsNiceV1(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
+			t.Parallel()
 			got := y2015.IsNiceV1(tt.value)
 			require.Equal(t, tt.want, got, "IsNiceV1(%q) = %t, want %t", tt.value, got, tt.want)
 		})
@@ -35,6 +37,7 @@ func TestY2015IsNiceV1(t *testing.T) {
 }
 
 func TestY2015IsNiceV2(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		value string
 		want  bool
@@ -47,6 +50,7 @@ func TestY2015IsNiceV2(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
+			t.Parallel()
 			got := y2015.IsNiceV2(tt.value)
 			require.Equal(t, tt.want, got, "IsNiceV2(%q) = %t, want %t", tt.value, got, tt.want)
 		})
@@ -54,6 +58,7 @@ func TestY2015IsNiceV2(t *testing.T) {
 }
 
 func TestY2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		value string
 		want  bool
@@ -69,6 +74,7 @@ func TestY2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
+			t.Parallel()
 			got := y2015.HasPairOfLettersWithMoreThanOneOccurrence(tt.value)
 			require.Equal(t, tt.want, got, "HasPairOfLettersWithMoreThanOneOccurrence(%q) = %t, want %t", tt.value, got, tt.want)
 		})
@@ -76,6 +82,7 @@ func TestY2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
 }
 
 func TestY2015HasLetterThatIsTheBreadOfALetterSandwich(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		value string
 		want  bool
@@ -89,6 +96,7 @@ func TestY2015HasLetterThatIsTheBreadOfALetterSandwich(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.value, func(t *testing.T) {
+			t.Parallel()
 			got := y2015.HasLetterThatIsTheBreadOfALetterSandwich(tt.value)
 			require.Equal(t, tt.want, got, "HasLetterThatIsTheBreadOfALetterSandwich(%q) = %t, want %t", tt.value, got, tt.want)
 		})
