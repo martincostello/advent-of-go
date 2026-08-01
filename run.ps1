@@ -11,9 +11,14 @@ if ([string]::IsNullOrEmpty($InputFile)) {
     $InputFile = Join-Path $PSScriptRoot "input" "Y${Year}" ("Day{0:D2}" -f $Day) "input.txt"
 }
 
-$path = Join-Path (Join-Path $PSScriptRoot "cmd") "aoc"
+Push-Location $PSScriptRoot
 
-go run $path --day $Day --year $Year $InputFile
+try {
+    go run ./cmd/aoc --day $Day --year $Year $InputFile
+}
+finally {
+    Pop-Location
+}
 
 if ($LASTEXITCODE -ne 0) {
     throw "go run failed"
