@@ -36,7 +36,7 @@ func Parse(stderr io.Writer, args ...string) (*Options, error) {
 
 	flags.Usage = func() {
 		flags.Output()
-		fmt.Fprintf(stderr, "Usage: %s [options] <file>\n", flags.Name())
+		_, _ = fmt.Fprintf(stderr, "Usage: %s [options] <file>\n", flags.Name())
 		flags.PrintDefaults()
 	}
 
