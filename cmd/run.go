@@ -62,29 +62,11 @@ func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error)
 		return nil, fmt.Errorf("failed to solve puzzle: %w", err)
 	}
 
-	duration := time.Since(started)
-
-	err = printSolution(solution, duration, stdout)
-	if err != nil {
-		return nil, err
-	}
+	printSolution(solution, time.Since(started), stdout)
 
 	return &solution, nil
 }
 
-func printSolution(s puzzles.PuzzleSolution, d time.Duration, w io.Writer) error {
-
-	_, err := fmt.Fprintf(w, `Part 1: %s
-Part 2: %s
-
-Solved in %s
-`, s.Part1, s.Part2, d.Round(time.Millisecond))
-
-	/*
-		if len(s.Visualization) > 0 {
-			_, _ = fmt.Fprintf(w, "Visualization:\n%s\n", s.Visualization)
-		}
-	*/
-
-	return err
+func printSolution(s puzzles.PuzzleSolution, d time.Duration, w io.Writer) {
+	_, _ = fmt.Fprintf(w, "Part 1: %s\nPart 2: %s\n\nSolved in %s\n", s.Part1, s.Part2, d.Round(time.Millisecond))
 }
