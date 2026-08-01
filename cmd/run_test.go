@@ -46,19 +46,20 @@ var tests = []struct {
 func TestCmdRun(t *testing.T) {
 	t.Parallel()
 	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(t *testing.T) {
+		c := tt
+		t.Run(fmt.Sprintf("%d-%02d", c.year, c.day), func(t *testing.T) {
 			t.Parallel()
 			input := filepath.Join(
 				inputDir,
-				fmt.Sprintf("Y%d", tt.year),
-				fmt.Sprintf("Day%02d", tt.day),
+				fmt.Sprintf("Y%d", c.year),
+				fmt.Sprintf("Day%02d", c.day),
 				"input.txt",
 			)
-			env := newEnv("--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input)
+			env := newEnv("--year", strconv.Itoa(c.year), "--day", strconv.Itoa(c.day), input)
 			got, err := cmd.Run(env, t.Context())
-			require.NoError(t, err, "Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
-			if diff := cmp.Diff(tt.want, *got); diff != "" {
-				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
+			require.NoError(t, err, "Run(%d, %d) returned an error: %v", c.year, c.day, err)
+			if diff := cmp.Diff(c.want, *got); diff != "" {
+				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", c.year, c.day, diff)
 			}
 		})
 	}

@@ -22,6 +22,10 @@ type Options struct {
 func Parse(stderr io.Writer, args ...string) (*Options, error) {
 	now := time.Now().Local()
 
+	if stderr == nil {
+		stderr = io.Discard
+	}
+
 	options := &Options{
 		Year:     now.Year(),
 		Day:      int(math.Min(float64(now.Day()), 25)),

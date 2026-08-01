@@ -28,10 +28,11 @@ func TestY2015IsNiceV1(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.value, func(t *testing.T) {
+		c := tt
+		t.Run(c.value, func(t *testing.T) {
 			t.Parallel()
-			got := y2015.IsNiceV1(tt.value)
-			require.Equal(t, tt.want, got, "IsNiceV1(%q) = %t, want %t", tt.value, got, tt.want)
+			got := y2015.IsNiceV1(c.value)
+			require.Equal(t, c.want, got, "IsNiceV1(%q) = %t, want %t", c.value, got, c.want)
 		})
 	}
 }
@@ -49,10 +50,11 @@ func TestY2015IsNiceV2(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.value, func(t *testing.T) {
+		c := tt
+		t.Run(c.value, func(t *testing.T) {
 			t.Parallel()
-			got := y2015.IsNiceV2(tt.value)
-			require.Equal(t, tt.want, got, "IsNiceV2(%q) = %t, want %t", tt.value, got, tt.want)
+			got := y2015.IsNiceV2(c.value)
+			require.Equal(t, c.want, got, "IsNiceV2(%q) = %t, want %t", c.value, got, c.want)
 		})
 	}
 }
@@ -73,10 +75,11 @@ func TestY2015HasPairOfLettersWithMoreThanOneOccurrence(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.value, func(t *testing.T) {
+		c := tt
+		t.Run(c.value, func(t *testing.T) {
 			t.Parallel()
-			got := y2015.HasPairOfLettersWithMoreThanOneOccurrence(tt.value)
-			require.Equal(t, tt.want, got, "HasPairOfLettersWithMoreThanOneOccurrence(%q) = %t, want %t", tt.value, got, tt.want)
+			got := y2015.HasPairOfLettersWithMoreThanOneOccurrence(c.value)
+			require.Equal(t, c.want, got, "HasPairOfLettersWithMoreThanOneOccurrence(%q) = %t, want %t", c.value, got, c.want)
 		})
 	}
 }
@@ -95,10 +98,11 @@ func TestY2015HasLetterThatIsTheBreadOfALetterSandwich(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.value, func(t *testing.T) {
+		c := tt
+		t.Run(c.value, func(t *testing.T) {
 			t.Parallel()
-			got := y2015.HasLetterThatIsTheBreadOfALetterSandwich(tt.value)
-			require.Equal(t, tt.want, got, "HasLetterThatIsTheBreadOfALetterSandwich(%q) = %t, want %t", tt.value, got, tt.want)
+			got := y2015.HasLetterThatIsTheBreadOfALetterSandwich(c.value)
+			require.Equal(t, c.want, got, "HasLetterThatIsTheBreadOfALetterSandwich(%q) = %t, want %t", c.value, got, c.want)
 		})
 	}
 }

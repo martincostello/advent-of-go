@@ -24,11 +24,12 @@ func TestY2015GetLowestPositiveNumberHash(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.secretKey, func(t *testing.T) {
+		c := tt
+		t.Run(c.secretKey, func(t *testing.T) {
 			t.Parallel()
-			got, err := y2015.GetLowestPositiveNumberHash(tt.secretKey, tt.zeroes, t.Context())
-			require.NoError(t, err, "GetLowestPositiveNumberHash(%q, %d) returned error: %v", tt.secretKey, tt.zeroes, err)
-			require.Equal(t, tt.want, got, "GetLowestPositiveNumberHash(%q, %d) = %d, want %d", tt.secretKey, tt.zeroes, got, tt.want)
+			got, err := y2015.GetLowestPositiveNumberHash(c.secretKey, c.zeroes, t.Context())
+			require.NoError(t, err, "GetLowestPositiveNumberHash(%q, %d) returned error: %v", c.secretKey, c.zeroes, err)
+			require.Equal(t, c.want, got, "GetLowestPositiveNumberHash(%q, %d) = %d, want %d", c.secretKey, c.zeroes, got, c.want)
 		})
 	}
 }

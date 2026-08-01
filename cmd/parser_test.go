@@ -33,7 +33,7 @@ func TestCmdParseWhenValidFlags(t *testing.T) {
 		env = newEnv("--day", "1", "--year", "2015", input)
 	)
 
-	options, err := cmd.Parse(env.Stderr, env.Args...)
+	options, err := cmd.Parse(nil, env.Args...)
 	require.NoError(t, err, "Parse(%v) returned an error", env.Args)
 	require.Equal(t, 1, options.Day, "Parse(%v) day = %d, want 1", env.Args, options.Day)
 	require.Equal(t, 2015, options.Year, "Parse(%v) year = %d, want 2015", env.Args, options.Year)
@@ -54,9 +54,10 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(strings.Join(tt.args, " "), func(t *testing.T) {
+		args := tt.args
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
 			t.Parallel()
-			env := newEnv(tt.args...)
+			env := newEnv(args...)
 			_, err := cmd.Parse(env.Stderr, env.Args...)
 			require.Error(t, err, "Parse(%v) did not return an error", env.Args)
 		})
