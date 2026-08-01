@@ -5,10 +5,12 @@ package cmd_test
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
@@ -53,7 +55,7 @@ func TestCmdRun(t *testing.T) {
 			)
 			got, err := cmd.Run([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), input}, t.Context())
 			require.NoError(t, err, "Run(%d, %d) returned an error: %v", tt.year, tt.day, err)
-			if diff := cmp.Diff(tt.want, got); diff != "" {
+			if diff := cmp.Diff(tt.want, *got); diff != "" {
 				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", tt.year, tt.day, diff)
 			}
 		})
@@ -62,8 +64,8 @@ func TestCmdRun(t *testing.T) {
 
 func TestCmdRunUnsolved(t *testing.T) {
 	var (
-		year  = 2001
-		day   = 42
+		year  = time.Now().Year()
+		day   = 25
 		input = filepath.Join(
 			inputDir,
 			"Y2015",
@@ -75,7 +77,7 @@ func TestCmdRunUnsolved(t *testing.T) {
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }
 
-func TestCmdRunInvalidInput(t *testing.T) {
+func TestCmdRunInputFileNotFound(t *testing.T) {
 	var (
 		year  = 2015
 		day   = 1
@@ -86,6 +88,11 @@ func TestCmdRunInvalidInput(t *testing.T) {
 	)
 	_, err := cmd.Run([]string{"--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input}, t.Context())
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
+}
+
+func TestCmdRunInvalidFlag(t *testing.T) {
+	_, err := cmd.Run([]string{"--year", "2014", "--day", "1", "foo.txt"}, t.Context())
+	require.Error(t, err)
 }
 
 func BenchmarkCmdRun(b *testing.B) {
@@ -101,7 +108,10 @@ func BenchmarkCmdRun(b *testing.B) {
 			options, err := cmd.Parse([]string{"--year", strconv.Itoa(tt.year), "--day", strconv.Itoa(tt.day), inputFile})
 			require.NoError(b, err, "Parse(%d, %d) returned an error: %v", tt.year, tt.day, err)
 
-			data := puzzles.PuzzleData(options.Input)
+			bytes, err := os.ReadFile(options.FileName)
+			require.NoError(b, err)
+
+			data := puzzles.PuzzleData(bytes)
 
 			var input = &puzzles.PuzzleInput{
 				Year:  options.Year,

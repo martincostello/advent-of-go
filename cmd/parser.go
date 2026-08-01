@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"math"
@@ -12,49 +13,64 @@ import (
 )
 
 type Options struct {
-	Year  int
-	Day   int
-	Input []byte
+	Year     int
+	Day      int
+	FileName string
 }
 
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
 func Parse(args []string) (*Options, error) {
-	flags := flag.NewFlagSet("cmd", flag.ContinueOnError)
-	flags.SetOutput(os.Stdout)
-
 	now := time.Now().Local()
 
 	options := &Options{
-		Year:  now.Year(),
-		Day:   int(math.Max(1, math.Min(float64(now.Day()), 25))),
-		Input: nil,
+		Year:     now.Year(),
+		Day:      int(math.Min(float64(now.Day()), 25)),
+		FileName: "",
 	}
 
-	flags.IntVar(&options.Year, "year", options.Year, "The year of the puzzle to run")
-	flags.IntVar(&options.Day, "day", options.Day, "The day of the puzzle to run")
+	flags := flag.NewFlagSet("advent-of-go", flag.ContinueOnError)
+	flags.SetOutput(os.Stdout)
 
-	err := flags.Parse(args)
-	if err != nil {
-		if err == flag.ErrHelp {
+	flags.IntVar(&options.Year, "year", options.Year, "Year of the puzzle")
+	flags.IntVar(&options.Day, "day", options.Day, "Day of the puzzle")
+
+	flags.Usage = func() {
+		flags.Output()
+		fmt.Fprintf(os.Stderr, "Usage: %s [options] <file>\n", flags.Name())
+		flags.PrintDefaults()
+	}
+
+	if err := flags.Parse(args); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
 			os.Exit(0)
 		}
-		fmt.Fprintf(os.Stderr, "parsing flags failed: %v\n", err)
 		return nil, err
 	}
 
-	if flags.NArg() < 1 {
-		err = fmt.Errorf("no input file specified")
-		return nil, err
-	}
+	options.FileName = flags.Arg(0)
 
-	path := flags.Arg(0)
-	options.Input, err = os.ReadFile(path)
-
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "reading file %q failed: %v\n", path, err)
+	if err := validate(options, now.Year()); err != nil {
+		_, _ = fmt.Fprintln(flags.Output(), err)
+		flags.Usage()
 		return nil, err
 	}
 
 	return options, nil
+}
+
+func validate(options *Options, year int) error {
+	if options.Year < 2015 || options.Year > year {
+		return fmt.Errorf("invalid year: %d", options.Year)
+	}
+
+	if options.Day < 1 || options.Day > 25 {
+		return fmt.Errorf("invalid day: %d", options.Day)
+	}
+
+	if options.FileName == "" {
+		return fmt.Errorf("no input file specified")
+	}
+
+	return nil
 }

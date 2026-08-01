@@ -6,8 +6,10 @@ package cmd_test
 import (
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 
@@ -39,7 +41,11 @@ func TestCmdParseWhenInvalidFlag(t *testing.T) {
 	}{
 		{args: []string{"--invalid", "value"}},
 		{args: []string{"--day", "foo"}},
+		{args: []string{"--day", "0"}},
+		{args: []string{"--day", "26"}},
 		{args: []string{"--year", "foo"}},
+		{args: []string{"--year", "2014"}},
+		{args: []string{"--year", strconv.Itoa(time.Now().Year() + 1)}},
 	}
 
 	for _, tt := range tests {

@@ -6,22 +6,28 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/martincostello/advent-of-go/puzzles"
 	"github.com/martincostello/advent-of-go/solver"
 )
 
-func Run(args []string, ctx context.Context) (puzzles.PuzzleSolution, error) {
+func Run(args []string, ctx context.Context) (*puzzles.PuzzleSolution, error) {
 	options, err := Parse(args)
 	if err != nil {
-		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse arguments: %w", err)
+		return nil, err
 	}
 
-	fmt.Printf("Solving Advent of Code for day %02d of %04d\n", options.Day, options.Year)
-	fmt.Println()
+	bytes, err := os.ReadFile(options.FileName)
 
-	data := puzzles.PuzzleData(options.Input)
+	if err != nil {
+		return nil, fmt.Errorf("reading file %q failed: %w", options.FileName, err)
+	}
+
+	fmt.Printf("Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)
+
+	data := puzzles.PuzzleData(bytes)
 
 	var input = &puzzles.PuzzleInput{
 		Year:  options.Year,
@@ -33,7 +39,7 @@ func Run(args []string, ctx context.Context) (puzzles.PuzzleSolution, error) {
 
 	solution, err := solver.Solve(input, ctx)
 	if err != nil {
-		return puzzles.PuzzleSolution{}, fmt.Errorf("failed to solve puzzle: %w", err)
+		return nil, fmt.Errorf("failed to solve puzzle: %w", err)
 	}
 
 	ended := time.Now()
@@ -48,5 +54,5 @@ func Run(args []string, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	fmt.Println()
 	fmt.Printf("Solved in %s\n", ended.Sub(started))
 
-	return solution, nil
+	return &solution, nil
 }

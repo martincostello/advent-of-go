@@ -22,7 +22,7 @@ func Day02(input []string) (puzzles.PuzzleSolution, error) {
 
 		_, err := fmt.Sscanf(dimensions, "%fx%fx%f", &l, &w, &h)
 		if err != nil {
-			return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse dimensions %q: %v", dimensions, err)
+			return puzzles.PuzzleSolution{}, fmt.Errorf("failed to parse dimensions %q: %w", dimensions, err)
 		}
 
 		area := 2*l*w + 2*h*w + 2*h*l
