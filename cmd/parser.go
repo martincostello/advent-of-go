@@ -20,7 +20,7 @@ type Options struct {
 // Parse parses the command-line flags and input for the application,
 // returning the year and day of the puzzle to solve and its input data.
 func Parse(args []string) (*Options, error) {
-	flags := flag.NewFlagSet("cmd", flag.ContinueOnError)
+	flags := flag.NewFlagSet("advent-of-go", flag.ContinueOnError)
 	flags.SetOutput(os.Stdout)
 
 	now := time.Now().Local()
@@ -31,8 +31,14 @@ func Parse(args []string) (*Options, error) {
 		Input: nil,
 	}
 
-	flags.IntVar(&options.Year, "year", options.Year, "The year of the puzzle to run")
-	flags.IntVar(&options.Day, "day", options.Day, "The day of the puzzle to run")
+	flags.IntVar(&options.Year, "year", options.Year, "Year of the puzzle")
+	flags.IntVar(&options.Day, "day", options.Day, "Day of the puzzle")
+
+	flags.Usage = func() {
+		flags.Output()
+		fmt.Fprintf(os.Stderr, "Usage: %s [options] <file>\n", flags.Name())
+		flags.PrintDefaults()
+	}
 
 	err := flags.Parse(args)
 	if err != nil {
