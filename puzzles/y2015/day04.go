@@ -8,6 +8,7 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"strconv"
 	"sync"
 
 	"github.com/martincostello/advent-of-go/puzzles"
@@ -102,12 +103,17 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 
 func searchForSolution(secretKey string, zeroes int, start int, length int, ctx context.Context) int {
 	limit := start + length
+
+	buffer := make([]byte, len(secretKey), len(secretKey)+20)
+	copy(buffer, secretKey)
+
 	for i := start; i < limit; i++ {
 		select {
 		case <-ctx.Done():
 			return -1
 		default:
-			if isSolution(i, secretKey, zeroes) {
+			target := strconv.AppendInt(buffer, int64(i), 10)
+			if isSolution(target, zeroes) {
 				return i
 			}
 		}
@@ -116,11 +122,9 @@ func searchForSolution(secretKey string, zeroes int, start int, length int, ctx 
 	return -1
 }
 
-func isSolution(value int, secretKey string, zeroes int) bool {
-	target := fmt.Sprintf("%s%d", secretKey, value)
-
+func isSolution(target []byte, zeroes int) bool {
 	// codeql[go/weak-sensitive-data-hashing] not used for real passwords
-	hash := md5.Sum([]byte(target))
+	hash := md5.Sum(target)
 
 	wholeBytes := zeroes / 2
 	remainder := zeroes % 2
