@@ -104,6 +104,17 @@ func TestCmdRunInvalidFlag(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestCmdRunNoOutput(t *testing.T) {
+	t.Parallel()
+	var env = &cmd.Environment{
+		Args:   []string{"--help"},
+		Stdout: nil,
+		Stderr: nil,
+	}
+	_, err := cmd.Run(env, t.Context())
+	require.Error(t, err)
+}
+
 func BenchmarkCmdRun(b *testing.B) {
 	for _, tt := range tests {
 		b.Run(fmt.Sprintf("%d-%02d", tt.year, tt.day), func(b *testing.B) {

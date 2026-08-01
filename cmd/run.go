@@ -21,7 +21,20 @@ type Environment struct {
 }
 
 func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error) {
-	options, err := Parse(env.Stderr, env.Args...)
+	var (
+		stdout = env.Stdout
+		stderr = env.Stderr
+	)
+
+	if stdout == nil {
+		stdout = io.Discard
+	}
+
+	if stderr == nil {
+		stderr = io.Discard
+	}
+
+	options, err := Parse(stderr, env.Args...)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +45,7 @@ func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error)
 		return nil, fmt.Errorf("reading file %q failed: %w", options.FileName, err)
 	}
 
-	_, _ = fmt.Fprintf(env.Stdout, "Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)
+	_, _ = fmt.Fprintf(stdout, "Solving Advent of Code for day %02d of %04d\n\n", options.Day, options.Year)
 
 	data := puzzles.PuzzleData(bytes)
 
@@ -51,15 +64,15 @@ func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error)
 
 	ended := time.Now()
 
-	_, _ = fmt.Fprintf(env.Stdout, "Part 1: %s\n", solution.Part1)
-	_, _ = fmt.Fprintf(env.Stdout, "Part 2: %s\n", solution.Part2)
+	_, _ = fmt.Fprintf(stdout, "Part 1: %s\n", solution.Part1)
+	_, _ = fmt.Fprintf(stdout, "Part 2: %s\n", solution.Part2)
 
 	if len(solution.Visualization) > 0 {
-		_, _ = fmt.Fprintf(env.Stdout, "Visualization:\n%s\n", solution.Visualization)
+		_, _ = fmt.Fprintf(stdout, "Visualization:\n%s\n", solution.Visualization)
 	}
 
-	_, _ = fmt.Fprintln(env.Stdout)
-	_, _ = fmt.Fprintf(env.Stdout, "Solved in %s\n", ended.Sub(started))
+	_, _ = fmt.Fprintln(stdout)
+	_, _ = fmt.Fprintf(stdout, "Solved in %s\n", ended.Sub(started))
 
 	return &solution, nil
 }
