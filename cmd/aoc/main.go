@@ -15,6 +15,10 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	env := &cmd.Environment{
 		Args:   os.Args[1:],
 		Stdout: os.Stdout,
@@ -25,9 +29,10 @@ func main() {
 	_, err := cmd.Run(ctx, env)
 	if err != nil {
 		if errors.Is(err, flag.ErrHelp) {
-			os.Exit(1)
+			return 1
 		}
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }
