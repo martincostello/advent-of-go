@@ -15,7 +15,7 @@ import (
 )
 
 // Day04 solves the puzzle for day 4 of Advent of Code 2015.
-func Day04(input string, ctx context.Context) (puzzles.PuzzleSolution, error) {
+func Day04(ctx context.Context, input string) (puzzles.PuzzleSolution, error) {
 	var (
 		err5, err6      error
 		lowestZeroHash5 = -1
@@ -31,14 +31,14 @@ func Day04(input string, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	defer cancel()
 
 	wg.Go(func() {
-		lowestZeroHash5, err5 = GetLowestPositiveNumberHash(input, 5, ctx)
+		lowestZeroHash5, err5 = GetLowestPositiveNumberHash(ctx, input, 5)
 		if err5 != nil {
 			cancel()
 			return
 		}
 	})
 	wg.Go(func() {
-		lowestZeroHash6, err6 = GetLowestPositiveNumberHash(input, 6, ctx)
+		lowestZeroHash6, err6 = GetLowestPositiveNumberHash(ctx, input, 6)
 		if err6 != nil {
 			cancel()
 			return
@@ -52,7 +52,7 @@ func Day04(input string, ctx context.Context) (puzzles.PuzzleSolution, error) {
 	}, errors.Join(err5, err6)
 }
 
-func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Context) (int, error) {
+func GetLowestPositiveNumberHash(ctx context.Context, secretKey string, zeroes int) (int, error) {
 	var (
 		parallelism = 20
 		rangeSize   = 500
@@ -70,7 +70,7 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 		var wg sync.WaitGroup
 		for j := range parallelism {
 			wg.Go(func() {
-				solution := searchForSolution(secretKey, zeroes, i+(j*rangeSize), rangeSize, ctx)
+				solution := searchForSolution(ctx, secretKey, zeroes, i+(j*rangeSize), rangeSize)
 				if solution != -1 {
 					cancel()
 				}
@@ -92,6 +92,10 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 		if best != maxInt {
 			return best, nil
 		}
+
+		if err := ctx.Err(); err != nil {
+			return -1, err
+		}
 	}
 
 	if err := ctx.Err(); err != nil {
@@ -101,7 +105,7 @@ func GetLowestPositiveNumberHash(secretKey string, zeroes int, ctx context.Conte
 	return -1, errors.New("no solution was found for the specified secret key")
 }
 
-func searchForSolution(secretKey string, zeroes int, start int, length int, ctx context.Context) int {
+func searchForSolution(ctx context.Context, secretKey string, zeroes int, start int, length int) int {
 	limit := start + length
 
 	buffer := make([]byte, len(secretKey), len(secretKey)+20)
