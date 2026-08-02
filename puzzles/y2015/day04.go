@@ -5,7 +5,7 @@ package y2015
 
 import (
 	"context"
-	"crypto/md5"
+	"crypto/md5" //nolint:gosec // reason: not used for real passwords
 	"errors"
 	"fmt"
 	"strconv"
@@ -105,7 +105,7 @@ func GetLowestPositiveNumberHash(ctx context.Context, secretKey string, zeroes i
 	return -1, errors.New("no solution was found for the specified secret key")
 }
 
-func searchForSolution(ctx context.Context, secretKey string, zeroes int, start int, length int) int {
+func searchForSolution(ctx context.Context, secretKey string, zeroes, start, length int) int {
 	limit := start + length
 
 	buffer := make([]byte, len(secretKey), len(secretKey)+20)
@@ -128,6 +128,7 @@ func searchForSolution(ctx context.Context, secretKey string, zeroes int, start 
 
 func isSolution(target []byte, zeroes int) bool {
 	// codeql[go/weak-sensitive-data-hashing] not used for real passwords
+	//nolint:gosec // reason: not used for real passwords
 	hash := md5.Sum(target)
 
 	wholeBytes := zeroes / 2

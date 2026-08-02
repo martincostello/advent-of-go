@@ -43,7 +43,7 @@ type Point struct {
 }
 
 // Adds two points together and returns the result as a new point.
-func Add(left Point, right Point) Point {
+func Add(left, right Point) Point {
 	return Point{
 		X: left.X + right.X,
 		Y: left.Y + right.Y,
