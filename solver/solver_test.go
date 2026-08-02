@@ -28,7 +28,7 @@ func TestSolverSolveWhenUnsolved(t *testing.T) {
 		c := tt
 		t.Run(fmt.Sprintf("%d-%02d", c.input.Year, c.input.Day), func(t *testing.T) {
 			t.Parallel()
-			_, err := solver.Solve(&c.input, t.Context())
+			_, err := solver.Solve(t.Context(), &c.input)
 			require.Error(t, err, "Solve(%v#) did not return an error", c.input)
 		})
 	}

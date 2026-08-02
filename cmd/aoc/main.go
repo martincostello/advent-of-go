@@ -9,21 +9,30 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 
 	"github.com/martincostello/advent-of-go/cmd"
 )
 
 func main() {
-	_, err := cmd.Run(&cmd.Environment{
+	os.Exit(run())
+}
+
+func run() int {
+	env := &cmd.Environment{
 		Args:   os.Args[1:],
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
-	}, context.Background())
+	}
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
+	_, err := cmd.Run(ctx, env)
 	if err != nil {
 		if errors.Is(err, flag.ErrHelp) {
-			os.Exit(1)
+			return 1
 		}
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }

@@ -56,7 +56,7 @@ func TestCmdRun(t *testing.T) {
 				"input.txt",
 			)
 			env := newEnv("--year", strconv.Itoa(c.year), "--day", strconv.Itoa(c.day), input)
-			got, err := cmd.Run(env, t.Context())
+			got, err := cmd.Run(t.Context(), env)
 			require.NoError(t, err, "Run(%d, %d) returned an error: %v", c.year, c.day, err)
 			if diff := cmp.Diff(c.want, *got); diff != "" {
 				t.Errorf("Run(%d, %d) mismatch (-want +got):\n%s", c.year, c.day, diff)
@@ -78,7 +78,7 @@ func TestCmdRunUnsolved(t *testing.T) {
 		)
 		env = newEnv("--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input)
 	)
-	_, err := cmd.Run(env, t.Context())
+	_, err := cmd.Run(t.Context(), env)
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }
 
@@ -93,14 +93,14 @@ func TestCmdRunInputFileNotFound(t *testing.T) {
 		)
 	)
 	env := newEnv("--year", strconv.Itoa(year), "--day", strconv.Itoa(day), input)
-	_, err := cmd.Run(env, t.Context())
+	_, err := cmd.Run(t.Context(), env)
 	require.Error(t, err, "Run(%d, %d) did not return an error", year, day)
 }
 
 func TestCmdRunInvalidFlag(t *testing.T) {
 	t.Parallel()
 	env := newEnv("--year", "2014", "--day", "1", "foo.txt")
-	_, err := cmd.Run(env, t.Context())
+	_, err := cmd.Run(t.Context(), env)
 	require.Error(t, err)
 }
 
@@ -111,7 +111,7 @@ func TestCmdRunNoOutput(t *testing.T) {
 		Stdout: nil,
 		Stderr: nil,
 	}
-	_, err := cmd.Run(env, t.Context())
+	_, err := cmd.Run(t.Context(), env)
 	require.Error(t, err)
 }
 
@@ -144,7 +144,7 @@ func BenchmarkCmdRun(b *testing.B) {
 
 			b.ResetTimer()
 			for b.Loop() {
-				_, err = solver.Solve(input, b.Context())
+				_, err = solver.Solve(b.Context(), input)
 				if err != nil {
 					b.Fatalf("Solve(%d, %d) returned an error: %v", tt.year, tt.day, err)
 				}

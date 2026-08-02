@@ -20,7 +20,7 @@ type Environment struct {
 	Stderr io.Writer
 }
 
-func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error) {
+func Run(ctx context.Context, env *Environment) (*puzzles.PuzzleSolution, error) {
 	var (
 		stdout = env.Stdout
 		stderr = env.Stderr
@@ -57,14 +57,14 @@ func Run(env *Environment, ctx context.Context) (*puzzles.PuzzleSolution, error)
 
 	started := time.Now()
 
-	solution, err := solver.Solve(input, ctx)
+	solution, err := solver.Solve(ctx, input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to solve puzzle: %w", err)
 	}
 
 	printSolution(solution, time.Since(started), stdout)
 
-	return &solution, nil
+	return &solution, ctx.Err()
 }
 
 func printSolution(s puzzles.PuzzleSolution, d time.Duration, w io.Writer) {
