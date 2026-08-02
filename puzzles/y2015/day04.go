@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"strconv"
 	"sync"
+	"sync/atomic"
 
 	"github.com/martincostello/advent-of-go/puzzles"
 )
@@ -64,33 +65,34 @@ func GetLowestPositiveNumberHash(ctx context.Context, secretKey string, zeroes i
 	maxInt := int(^uint(0) >> 1)
 	limit := maxInt - (parallelism * rangeSize)
 
-	for i := 0; i < limit; i += parallelism * rangeSize {
-		solutions := make(chan int, parallelism)
+	var solution atomic.Int64
+	solution.Store(-1)
 
+	for i := 0; i < limit; i += parallelism * rangeSize {
 		var wg sync.WaitGroup
 		for j := range parallelism {
 			wg.Go(func() {
-				solution := searchForSolution(ctx, secretKey, zeroes, i+(j*rangeSize), rangeSize)
-				if solution != -1 {
-					cancel()
+				candidate := searchForSolution(ctx, secretKey, zeroes, i+(j*rangeSize), rangeSize)
+				if candidate == -1 {
+					return
 				}
-				solutions <- solution
+				for {
+					best := solution.Load()
+					if best != -1 && int64(candidate) >= best {
+						break
+					}
+					if solution.CompareAndSwap(best, int64(candidate)) {
+						cancel()
+						break
+					}
+				}
 			})
 		}
 
 		wg.Wait()
-		close(solutions)
 
-		best := maxInt
-
-		for solution := range solutions {
-			if solution < best && solution != -1 {
-				best = solution
-			}
-		}
-
-		if best != maxInt {
-			return best, nil
+		if best := solution.Load(); best != -1 {
+			return int(best), nil
 		}
 
 		if err := ctx.Err(); err != nil {
