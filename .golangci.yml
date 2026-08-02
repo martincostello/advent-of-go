@@ -14,9 +14,54 @@ issues:
   max-same-issues: 0
 
 linters:
-  default: standard
   enable:
+    - bodyclose
+    - errcheck
+    - errorlint
     - gocritic
+    - gocyclo
+    - gosec
+    - govet
+    - ineffassign
     - misspell
+    - nilerr
+    - revive
+    - staticcheck
     - unconvert
     - unused
+    - whitespace
+  settings:
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+        - style
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    revive:
+      confidence: 0.8
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: dot-imports
+        - name: error-naming
+        - name: error-return
+        - name: error-strings
+        - name: errorf
+        - name: if-return
+        - name: increment-decrement
+        - name: indent-error-flow
+        - name: range
+        - name: receiver-naming
+        - name: time-naming
+        - name: unexported-return
+        - name: var-declaration
+        - name: var-naming
+
+run:
+  issues-exit-code: 1
+  tests: true
+  timeout: 5m
