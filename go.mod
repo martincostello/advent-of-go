@@ -6,7 +6,7 @@ toolchain go1.26.6
 
 require (
 	github.com/google/go-cmp v0.7.0
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 )
 
 require (
