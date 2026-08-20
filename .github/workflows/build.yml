@@ -13,7 +13,7 @@ concurrency:
 env:
   FORCE_COLOR: 3
   # renovate: datasource=github-releases depName=golangci-lint packageName=golangci/golangci-lint
-  GOLANGCI_LINT_VERSION: 'v2.13.0'
+  GOLANGCI_LINT_VERSION: 'v2.13.1'
   TERM: xterm
 
 permissions: {}
