@@ -2,7 +2,7 @@ module github.com/martincostello/advent-of-go
 
 go 1.26
 
-toolchain go1.27.1
+toolchain go1.27.2
 
 require (
 	github.com/google/go-cmp v0.7.0
